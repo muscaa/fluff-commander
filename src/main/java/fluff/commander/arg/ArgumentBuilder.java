@@ -42,38 +42,48 @@ public class ArgumentBuilder<V> {
 	}
 	
 	public static ArgumentBuilder<Boolean> Boolean(String... names) {
-		return of(Boolean.class, names);
+		return of(Boolean.class, names)
+				.defaultValue(false)
+				;
 	}
 	
 	public static ArgumentBuilder<Byte> Byte(String... names) {
-		return of(Byte.class, names);
+		return of(Byte.class, names)
+				;
 	}
 	
 	public static ArgumentBuilder<Character> Char(String... names) {
-		return of(Character.class, names);
+		return of(Character.class, names)
+				;
 	}
 	
 	public static ArgumentBuilder<Short> Short(String... names) {
-		return of(Short.class, names);
+		return of(Short.class, names)
+				;
 	}
 	
 	public static ArgumentBuilder<Integer> Int(String... names) {
-		return of(Integer.class, names);
+		return of(Integer.class, names)
+				;
 	}
 	
 	public static ArgumentBuilder<Float> Float(String... names) {
-		return of(Float.class, names);
+		return of(Float.class, names)
+				;
 	}
 	
 	public static ArgumentBuilder<Long> Long(String... names) {
-		return of(Long.class, names);
+		return of(Long.class, names)
+				;
 	}
 	
 	public static ArgumentBuilder<Double> Double(String... names) {
-		return of(Double.class, names);
+		return of(Double.class, names)
+				;
 	}
 	
 	public static ArgumentBuilder<String> String(String... names) {
-		return of(String.class, names);
+		return of(String.class, names)
+				;
 	}
 }
