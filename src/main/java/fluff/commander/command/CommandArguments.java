@@ -22,39 +22,35 @@ public class CommandArguments {
 		return (V) values.get(arg);
 	}
 	
-	public boolean getBoolean(IArgument<Boolean> arg) {
+	public boolean Boolean(IArgument<Boolean> arg) {
 		return get(arg);
 	}
 	
-	public byte getByte(IArgument<Byte> arg) {
+	public byte Byte(IArgument<Byte> arg) {
 		return get(arg);
 	}
 	
-	public char getChar(IArgument<Character> arg) {
+	public char Char(IArgument<Character> arg) {
 		return get(arg);
 	}
 	
-	public short getShort(IArgument<Short> arg) {
+	public short Short(IArgument<Short> arg) {
 		return get(arg);
 	}
 	
-	public int getInt(IArgument<Integer> arg) {
+	public int Int(IArgument<Integer> arg) {
 		return get(arg);
 	}
 	
-	public float getFloat(IArgument<Float> arg) {
+	public float Float(IArgument<Float> arg) {
 		return get(arg);
 	}
 	
-	public long getLong(IArgument<Long> arg) {
+	public long Long(IArgument<Long> arg) {
 		return get(arg);
 	}
 	
-	public double getDouble(IArgument<Double> arg) {
-		return get(arg);
-	}
-	
-	public String getString(IArgument<String> arg) {
+	public double Double(IArgument<Double> arg) {
 		return get(arg);
 	}
 	

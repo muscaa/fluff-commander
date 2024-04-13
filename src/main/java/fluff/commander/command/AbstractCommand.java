@@ -3,12 +3,11 @@ package fluff.commander.command;
 import fluff.commander.CommanderException;
 import fluff.commander.FluffCommander;
 import fluff.commander.arg.ArgumentRegistry;
-import fluff.commander.arg.IArgument;
 import fluff.commander.arg.IArgumentInput;
 
 public abstract class AbstractCommand implements ICommand {
 	
-	private final ArgumentRegistry reg = new ArgumentRegistry();
+	protected final ArgumentRegistry reg = new ArgumentRegistry();
 	private final String name;
 	
 	ICommand parent;
@@ -16,17 +15,12 @@ public abstract class AbstractCommand implements ICommand {
 	public AbstractCommand(String name) {
 		this.name = name;
 		
-		initArguments(reg);
+		initArguments();
 	}
 	
-	public abstract void initArguments(ArgumentRegistry reg);
+	public abstract void initArguments();
 	
 	public abstract void onAction(FluffCommander fc, CommandArguments args) throws CommanderException;
-	
-	@Override
-	public String getName() {
-		return name;
-	}
 	
 	@Override
 	public void onAction(FluffCommander fc, IArgumentInput in) throws CommanderException {
@@ -35,8 +29,9 @@ public abstract class AbstractCommand implements ICommand {
 		onAction(fc, args);
 	}
 	
-	protected <V> IArgument<V> arg(String name) {
-		return (IArgument<V>) reg.get(name);
+	@Override
+	public String getName() {
+		return name;
 	}
 	
 	protected <V extends ICommand> V parent() {

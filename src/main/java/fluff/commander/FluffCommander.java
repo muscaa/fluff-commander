@@ -1,17 +1,16 @@
 package fluff.commander;
 
 import fluff.commander.arg.IArgumentInput;
-import fluff.commander.command.EmptyCommand;
-import fluff.commander.command.ForwardCommand;
 import fluff.commander.command.ICommandOutput;
 import fluff.commander.command.SystemCommandOutput;
+import fluff.commander.command.TaskCommand;
 
-public class FluffCommander extends ForwardCommand {
+public class FluffCommander extends TaskCommand {
 	
 	private ICommandOutput out = new SystemCommandOutput();
 	
 	public FluffCommander() {
-		super(new EmptyCommand(null));
+		super(null);
 	}
 	
 	public void execute(IArgumentInput in) throws CommanderException {
