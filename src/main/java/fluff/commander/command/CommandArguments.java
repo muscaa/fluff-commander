@@ -15,6 +15,7 @@ import fluff.commander.arg.IArgumentInput;
 public class CommandArguments {
 	
 	private final Map<IArgument<?>, Object> values = new HashMap<>();
+	private boolean missing;
 	
 	CommandArguments() {}
 	
@@ -54,7 +55,11 @@ public class CommandArguments {
 		return get(arg);
 	}
 	
-	public static CommandArguments parse(IArgumentInput in, ArgumentRegistry reg) throws CommanderException {
+	public boolean missing() {
+		return missing;
+	}
+	
+	public static CommandArguments parse(IArgumentInput in, ArgumentRegistry reg, boolean ignoreMissing) throws CommanderException {
 		CommandArguments args = new CommandArguments();
 		for (IArgument<?> arg : reg.all()) {
 			if (arg.isRequired()) continue;
@@ -82,11 +87,15 @@ public class CommandArguments {
 			missing.add(arg);
 		}
 		if (!missing.isEmpty()) {
-			throw new CommanderException(
-					"Missing arguments: " + missing.stream()
-							.map(arg -> arg.getNames()[0])
-							.collect(Collectors.toList())
-					);
+			args.missing = true;
+			
+			if (!ignoreMissing) {
+				throw new CommanderException(
+						"Missing arguments: " + missing.stream()
+								.map(arg -> arg.getNames()[0])
+								.collect(Collectors.toList())
+						);
+			}
 		}
 		return args;
 	}

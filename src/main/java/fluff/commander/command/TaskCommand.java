@@ -1,6 +1,6 @@
 package fluff.commander.command;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import fluff.commander.CommanderException;
@@ -10,7 +10,7 @@ import fluff.functions.gen.obj.VoidFunc1;
 
 public class TaskCommand extends AbstractCommand {
 	
-	protected final Map<String, ICommand> commands = new HashMap<>();
+	protected final Map<String, ICommand> commands = new LinkedHashMap<>();
 	
 	public TaskCommand(String name) {
 		super(name);

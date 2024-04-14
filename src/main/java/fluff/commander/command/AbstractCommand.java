@@ -4,6 +4,7 @@ import fluff.commander.CommanderException;
 import fluff.commander.FluffCommander;
 import fluff.commander.arg.ArgumentRegistry;
 import fluff.commander.arg.IArgumentInput;
+import fluff.commander.utils.HelpGenerator;
 
 public abstract class AbstractCommand implements ICommand {
 	
@@ -15,6 +16,7 @@ public abstract class AbstractCommand implements ICommand {
 	public AbstractCommand(String name) {
 		this.name = name;
 		
+		if (shouldGenerateHelp()) reg.register(HelpGenerator.ARG_HELP);
 		initArguments();
 	}
 	
@@ -24,7 +26,13 @@ public abstract class AbstractCommand implements ICommand {
 	
 	@Override
 	public boolean onAction(FluffCommander fc, IArgumentInput in) throws CommanderException {
-		CommandArguments args = CommandArguments.parse(in, reg);
+		CommandArguments args = CommandArguments.parse(in, reg, shouldGenerateHelp());
+		
+		if (shouldGenerateHelp() && (args.missing() || args.Boolean(HelpGenerator.ARG_HELP))) {
+			HelpGenerator help = HelpGenerator.of(this);
+			help.getLines().forEach(System.out::println);
+			return true;
+		}
 		
 		return onAction(fc, args);
 	}
@@ -37,6 +45,10 @@ public abstract class AbstractCommand implements ICommand {
 	@Override
 	public String getDescription() {
 		return null;
+	}
+	
+	protected boolean shouldGenerateHelp() {
+		return true;
 	}
 	
 	public <V extends ICommand> V parent() {

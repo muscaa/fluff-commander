@@ -16,7 +16,6 @@ public class HelpGenerator {
 	public static final IArgument<Boolean> ARG_HELP = ArgumentBuilder
 			.Boolean("--help")
 			.description("Shows help.")
-			.required()
 			.build();
 	
 	private final List<String> lines = new ArrayList<>();
@@ -55,7 +54,7 @@ public class HelpGenerator {
 	
 	public static HelpGenerator of(ICommand cmd, String usage, ArgumentRegistry reg) {
 		HelpGenerator help = new HelpGenerator();
-		help.append(cmd.getName() == null ?
+		help.append(cmd instanceof FluffCommander ?
 						"Help:" :
 						("Command '" + cmd.getName() + "' help:"))
 				.newLine();
@@ -70,21 +69,36 @@ public class HelpGenerator {
 						.newLine();
 		
 		if (!reg.isEmpty()) {
-			help.append("Arguments:")
+			help.newLine()
+					.append("Arguments:")
 					.newLine();
 			
-			for (IArgument<?> arg : reg.all()) {
+			List<IArgument<?>> args = reg.all();
+			
+			int spaces = 25;
+			for (IArgument<?> arg : args) {
+				int len = String.join(", ", arg.getNames()).length();
+				
+				if (len > spaces) spaces = len;
+			}
+			
+			for (IArgument<?> arg : args) {
 				help.addTab(arg.isRequired() ? "  * " : "    ");
 				
-				help.append(String.join(", ", arg.getNames()));
+				String names = String.join(", ", arg.getNames());
+				help.append(names);
+				for (int i = names.length(); i <= spaces; i++) {
+					help.append(" ");
+				}
 				IArgumentParser parser = reg.getParsers().get(arg.getParserClass());
-				help.append(" <")
+				help.append("<")
 						.append(parser == null ? "value" : String.join("|", parser.getValues()))
 						.append(">");
-				if (!arg.isRequired() && arg.getDefaultValue() != null) help.append(" (default: ")
-								.append(arg.getDefaultValue())
-								.append(")");
-				help.append(":");
+				if (!arg.isRequired() && arg.getDefaultValue() != null) {
+					help.append(" (default: ")
+							.append(arg.getDefaultValue())
+							.append(")");
+				}
 				help.newLine();
 				
 				help.removeTab();
@@ -92,11 +106,14 @@ public class HelpGenerator {
 				
 				help.addTab();
 				
-				if (arg.getDescription() != null) help.append("Description: ")
-								.append(arg.getDescription())
-								.newLine();
+				if (arg.getDescription() != null) {
+					help.append("Description: ")
+							.append(arg.getDescription())
+							.newLine();
+				}
 				
 				help.removeTab();
+				help.newLine();
 				help.removeTab();
 			}
 		}
@@ -136,6 +153,10 @@ public class HelpGenerator {
 			}
 		}
 		
-		return of(cmd, sb.toString(), cmd.reg);
+		sb.append("[args|cmd]");
+		
+		HelpGenerator help = of(cmd, sb.toString(), cmd.reg);
+		// commands
+		return help;
 	}
 }
