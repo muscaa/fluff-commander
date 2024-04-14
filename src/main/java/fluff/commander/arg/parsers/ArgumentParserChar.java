@@ -13,4 +13,11 @@ public class ArgumentParserChar implements IArgumentParser<Character> {
 		
 		return in.consume().charAt(0);
 	}
+	
+	@Override
+	public String[] getValues() {
+		return new String[] {
+				"char"
+		};
+	}
 }

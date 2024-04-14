@@ -18,4 +18,12 @@ public class ArgumentParserBoolean implements IArgumentParser<Boolean> {
 		}
 		return true;
 	}
+	
+	@Override
+	public String[] getValues() {
+		return new String[] {
+				"true",
+				"false"
+		};
+	}
 }

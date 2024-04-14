@@ -6,7 +6,9 @@ import fluff.commander.arg.IArgumentInput;
 
 public interface ICommand {
 	
-	void onAction(FluffCommander fc, IArgumentInput in) throws CommanderException;
+	boolean onAction(FluffCommander fc, IArgumentInput in) throws CommanderException;
 	
 	String getName();
+	
+	String getDescription();
 }

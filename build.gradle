@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-	implementation("com.github.muscaa:fluff-functions:1.0.1+")
+	implementation "com.github.muscaa:fluff-functions:1.0.1+"
 }
 
 java {

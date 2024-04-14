@@ -41,6 +41,10 @@ public class ArgumentRegistry {
 		return list;
 	}
 	
+	public boolean isEmpty() {
+		return reg.isEmpty();
+	}
+	
 	public ArgumentParsers getParsers() {
 		return parsers;
 	}

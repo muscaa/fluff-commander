@@ -20,18 +20,20 @@ public class TaskCommand extends AbstractCommand {
 	public void initArguments() {}
 	
 	@Override
-	public void onAction(FluffCommander fc, CommandArguments args) throws CommanderException {}
+	public boolean onAction(FluffCommander fc, CommandArguments args) throws CommanderException {
+		return false;
+	}
 	
 	@Override
-	public void onAction(FluffCommander fc, IArgumentInput in) throws CommanderException {
-		super.onAction(fc, in);
+	public boolean onAction(FluffCommander fc, IArgumentInput in) throws CommanderException {
+		if (super.onAction(fc, in)) return true;
 		
-		if (in.isNull()) return;
+		if (in.isNull()) return false;
 		
 		ICommand cmd = commands.get(in.consume());
 		if (cmd == null) throw new CommanderException("Command not found!");
 		
-		cmd.onAction(fc, in);
+		return cmd.onAction(fc, in);
 	}
 	
 	public <V extends ICommand> V command(V command) {

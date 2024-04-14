@@ -7,7 +7,7 @@ import fluff.commander.arg.IArgumentInput;
 
 public abstract class AbstractCommand implements ICommand {
 	
-	protected final ArgumentRegistry reg = new ArgumentRegistry();
+	public final ArgumentRegistry reg = new ArgumentRegistry();
 	private final String name;
 	
 	ICommand parent;
@@ -20,13 +20,13 @@ public abstract class AbstractCommand implements ICommand {
 	
 	public abstract void initArguments();
 	
-	public abstract void onAction(FluffCommander fc, CommandArguments args) throws CommanderException;
+	public abstract boolean onAction(FluffCommander fc, CommandArguments args) throws CommanderException;
 	
 	@Override
-	public void onAction(FluffCommander fc, IArgumentInput in) throws CommanderException {
+	public boolean onAction(FluffCommander fc, IArgumentInput in) throws CommanderException {
 		CommandArguments args = CommandArguments.parse(in, reg);
 		
-		onAction(fc, args);
+		return onAction(fc, args);
 	}
 	
 	@Override
@@ -34,7 +34,12 @@ public abstract class AbstractCommand implements ICommand {
 		return name;
 	}
 	
-	protected <V extends ICommand> V parent() {
+	@Override
+	public String getDescription() {
+		return null;
+	}
+	
+	public <V extends ICommand> V parent() {
 		return (V) parent;
 	}
 }

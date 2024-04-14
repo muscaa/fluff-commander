@@ -16,4 +16,11 @@ public class ArgumentParserLong implements IArgumentParser<Long> {
 			throw new ArgumentException("Parse error!", e);
 		}
 	}
+	
+	@Override
+	public String[] getValues() {
+		return new String[] {
+				"long"
+		};
+	}
 }

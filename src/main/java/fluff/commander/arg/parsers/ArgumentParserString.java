@@ -12,4 +12,11 @@ public class ArgumentParserString implements IArgumentParser<String> {
 		
 		return in.consume();
 	}
+	
+	@Override
+	public String[] getValues() {
+		return new String[] {
+				"string"
+		};
+	}
 }

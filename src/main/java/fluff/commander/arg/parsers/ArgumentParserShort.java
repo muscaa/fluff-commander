@@ -16,4 +16,11 @@ public class ArgumentParserShort implements IArgumentParser<Short> {
 			throw new ArgumentException("Parse error!", e);
 		}
 	}
+	
+	@Override
+	public String[] getValues() {
+		return new String[] {
+				"short"
+		};
+	}
 }

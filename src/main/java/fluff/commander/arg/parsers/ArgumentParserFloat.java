@@ -16,4 +16,11 @@ public class ArgumentParserFloat implements IArgumentParser<Float> {
 			throw new ArgumentException("Parse error!", e);
 		}
 	}
+	
+	@Override
+	public String[] getValues() {
+		return new String[] {
+				"float"
+		};
+	}
 }

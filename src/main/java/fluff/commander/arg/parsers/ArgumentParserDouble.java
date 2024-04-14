@@ -16,4 +16,11 @@ public class ArgumentParserDouble implements IArgumentParser<Double> {
 			throw new ArgumentException("Parse error!", e);
 		}
 	}
+	
+	@Override
+	public String[] getValues() {
+		return new String[] {
+				"double"
+		};
+	}
 }

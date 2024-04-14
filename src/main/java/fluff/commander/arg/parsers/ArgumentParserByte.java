@@ -16,4 +16,11 @@ public class ArgumentParserByte implements IArgumentParser<Byte> {
 			throw new ArgumentException("Parse error!", e);
 		}
 	}
+	
+	@Override
+	public String[] getValues() {
+		return new String[] {
+				"byte"
+		};
+	}
 }
