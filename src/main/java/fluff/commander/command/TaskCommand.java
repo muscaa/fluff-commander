@@ -1,8 +1,5 @@
 package fluff.commander.command;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import fluff.commander.CommanderException;
 import fluff.commander.FluffCommander;
 import fluff.commander.arg.IArgumentInput;
@@ -10,7 +7,7 @@ import fluff.functions.gen.obj.VoidFunc1;
 
 public class TaskCommand extends AbstractCommand {
 	
-	protected final Map<String, ICommand> commands = new LinkedHashMap<>();
+	private final CommandRegistry commands = new CommandRegistry();
 	
 	public TaskCommand(String name) {
 		super(name);
@@ -39,7 +36,7 @@ public class TaskCommand extends AbstractCommand {
 	public <V extends ICommand> V command(V command) {
 		if (command instanceof AbstractCommand ac) ac.parent = this;
 		
-		commands.put(command.getName(), command);
+		commands.register(command);
 		return command;
 	}
 	
@@ -53,5 +50,9 @@ public class TaskCommand extends AbstractCommand {
 	
 	public void task(String name, VoidFunc1<TaskCommand> func) {
 		func.invoke(task(name));
+	}
+	
+	public CommandRegistry getCommandRegistry() {
+		return commands;
 	}
 }

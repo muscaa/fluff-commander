@@ -1,48 +1,19 @@
 package fluff.commander.arg;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import fluff.commander.CommanderRegistry;
+import fluff.commander.utils.HelpGenerator;
 
-public class ArgumentRegistry {
+public class ArgumentRegistry extends CommanderRegistry<IArgument<?>> {
 	
 	private final ArgumentParsers parsers = new ArgumentParsers();
-	private final Map<String, IArgument<?>> reg = new LinkedHashMap<>();
 	
-	public <V> IArgument<V> register(IArgument<V> arg) {
-		for (String name : arg.getNames()) {
-			reg.put(name, arg);
-		}
-		return arg;
+	public ArgumentRegistry() {
+		ignore(HelpGenerator.ARG_HELP);
 	}
 	
-	public void register(List<IArgument<?>> argList) {
-		for (IArgument<?> arg : argList) {
-			register(arg);
-		}
-	}
-	
-	public <V> IArgument<V> register(ArgumentBuilder<V> builder) {
-		return register(builder.build());
-	}
-	
-	public IArgument<?> get(String name) {
-		return reg.get(name);
-	}
-	
-	public List<IArgument<?>> all() {
-		List<IArgument<?>> list = new ArrayList<>();
-		for (Map.Entry<String, IArgument<?>> e : reg.entrySet()) {
-			if (!list.contains(e.getValue())) {
-				list.add(e.getValue());
-			}
-		}
-		return list;
-	}
-	
-	public boolean isEmpty() {
-		return reg.isEmpty();
+	@Override
+	protected String[] getKeys(IArgument<?> value) {
+		return value.getNames();
 	}
 	
 	public ArgumentParsers getParsers() {

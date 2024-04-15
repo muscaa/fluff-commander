@@ -5,11 +5,10 @@ import java.util.List;
 
 import fluff.commander.FluffCommander;
 import fluff.commander.arg.ArgumentBuilder;
-import fluff.commander.arg.ArgumentRegistry;
 import fluff.commander.arg.IArgument;
-import fluff.commander.arg.IArgumentParser;
 import fluff.commander.command.AbstractCommand;
 import fluff.commander.command.ICommand;
+import fluff.commander.command.TaskCommand;
 
 public class HelpGenerator {
 	
@@ -52,7 +51,7 @@ public class HelpGenerator {
 		return lines;
 	}
 	
-	public static HelpGenerator of(ICommand cmd, String usage, ArgumentRegistry reg) {
+	public static HelpGenerator of(ICommand cmd, String usage) {
 		HelpGenerator help = new HelpGenerator();
 		help.append(cmd instanceof FluffCommander ?
 						"Help:" :
@@ -68,95 +67,28 @@ public class HelpGenerator {
 						.append(cmd.getDescription())
 						.newLine();
 		
-		if (!reg.isEmpty()) {
-			help.newLine()
-					.append("Arguments:")
-					.newLine();
-			
-			List<IArgument<?>> args = reg.all();
-			
-			int spaces = 25;
-			for (IArgument<?> arg : args) {
-				int len = String.join(", ", arg.getNames()).length();
-				
-				if (len > spaces) spaces = len;
-			}
-			
-			for (IArgument<?> arg : args) {
-				help.addTab(arg.isRequired() ? "  * " : "    ");
-				
-				String names = String.join(", ", arg.getNames());
-				help.append(names);
-				for (int i = names.length(); i <= spaces; i++) {
-					help.append(" ");
-				}
-				IArgumentParser parser = reg.getParsers().get(arg.getParserClass());
-				help.append("<")
-						.append(parser == null ? "value" : String.join("|", parser.getValues()))
-						.append(">");
-				if (!arg.isRequired() && arg.getDefaultValue() != null) {
-					help.append(" (default: ")
-							.append(arg.getDefaultValue())
-							.append(")");
-				}
-				help.newLine();
-				
-				help.removeTab();
-				help.addTab();
-				
-				help.addTab();
-				
-				if (arg.getDescription() != null) {
-					help.append("Description: ")
-							.append(arg.getDescription())
-							.newLine();
-				}
-				
-				help.removeTab();
-				help.newLine();
-				help.removeTab();
-			}
-		}
-		
 		help.removeTab();
 		
 		return help;
 	}
 	
 	public static HelpGenerator of(AbstractCommand cmd) {
-		StringBuilder sb = new StringBuilder();
+		String usage = HelpUtils.getUsage(cmd);
 		
-		List<AbstractCommand> cmds = new ArrayList<>();
+		HelpGenerator help = of(cmd, usage);
 		
-		AbstractCommand cmd0 = cmd;
-		while (!(cmd0 instanceof FluffCommander)) {
-			cmds.add(cmd0);
-			
-			cmd0 = cmd0.parent();
-		}
-		cmds.add(cmd0);
+		help.addTab();
+		HelpUtils.appendArguments(help, cmd.getArgumentRegistry());
+		help.removeTab();
 		
-		for (int i = cmds.size() - 1; i >= 0; i--) {
-			AbstractCommand c = cmds.get(i);
-			
-			sb.append(c.getName())
-					.append(" ");
-			
-			for (IArgument<?> arg : c.reg.all()) {
-				if (!arg.isRequired()) continue;
-				
-				IArgumentParser parser = cmd.reg.getParsers().get(arg.getParserClass());
-				sb.append(arg.getNames()[0])
-						.append(" <")
-						.append(parser == null ? "value" : String.join("|", parser.getValues()))
-						.append("> ");
-			}
+		if (cmd instanceof TaskCommand task) {
+			help.addTab();
+			HelpUtils.appendCommands(help, task.getCommandRegistry());
+			help.removeTab();
 		}
 		
-		sb.append("[args|cmd]");
+		help.newLine();
 		
-		HelpGenerator help = of(cmd, sb.toString(), cmd.reg);
-		// commands
 		return help;
 	}
 }
