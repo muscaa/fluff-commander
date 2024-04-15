@@ -61,7 +61,7 @@ public class CommandArguments {
 	
 	public static CommandArguments parse(IArgumentInput in, ArgumentRegistry reg, boolean ignoreMissing) throws CommanderException {
 		CommandArguments args = new CommandArguments();
-		for (IArgument<?> arg : reg.all()) {
+		for (IArgument<?> arg : reg.getAll()) {
 			if (arg.isRequired()) continue;
 			
 			args.values.put(arg, arg.getDefaultValue());
@@ -80,7 +80,7 @@ public class CommandArguments {
 			args.values.put(arg, value);
 		}
 		List<IArgument<?>> missing = new ArrayList<>();
-		for (IArgument<?> arg : reg.all()) {
+		for (IArgument<?> arg : reg.getAll()) {
 			if (!arg.isRequired()) continue;
 			if (args.values.containsKey(arg)) continue;
 			

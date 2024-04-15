@@ -78,16 +78,17 @@ public class HelpGenerator {
 		HelpGenerator help = of(cmd, usage);
 		
 		help.addTab();
-		HelpUtils.appendArguments(help, cmd.getArgumentRegistry());
+		boolean arguments = HelpUtils.appendArguments(help, cmd.getArgumentRegistry());
 		help.removeTab();
 		
+		boolean commands = false;
 		if (cmd instanceof TaskCommand task) {
 			help.addTab();
-			HelpUtils.appendCommands(help, task.getCommandRegistry());
+			commands = HelpUtils.appendCommands(help, task.getCommandRegistry());
 			help.removeTab();
 		}
 		
-		help.newLine();
+		if (arguments || commands) help.newLine();
 		
 		return help;
 	}

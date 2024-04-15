@@ -34,7 +34,7 @@ public class HelpUtils {
 			sb.append(c.getName())
 					.append(" ");
 			
-			for (IArgument<?> arg : c.getArgumentRegistry().all()) {
+			for (IArgument<?> arg : c.getArgumentRegistry().getAll()) {
 				if (!arg.isRequired()) continue;
 				
 				IArgumentParser parser = cmd.getArgumentRegistry().getParsers().get(arg.getParserClass());
@@ -76,14 +76,14 @@ public class HelpUtils {
 		}
 	}
 	
-	public static void appendArguments(HelpGenerator help, ArgumentRegistry reg) {
-		if (reg.isEmpty()) return;
+	public static boolean appendArguments(HelpGenerator help, ArgumentRegistry reg) {
+		if (reg.isEmpty()) return false;
 		
 		help.newLine()
 				.append("Arguments:")
 				.newLine();
 		
-		List<IArgument<?>> args = reg.all();
+		List<IArgument<?>> args = reg.getNotIgnored();
 		int spaces = getSpaces(args, v -> String.join(", ", v.getNames()));
 		
 		for (int i = 0; i < args.size(); i++) {
@@ -120,16 +120,18 @@ public class HelpUtils {
 			if (i != args.size() - 1) help.newLine();
 			help.removeTab();
 		}
+		
+		return true;
 	}
 	
-	public static void appendCommands(HelpGenerator help, CommandRegistry reg) {
-		if (reg.isEmpty()) return;
+	public static boolean appendCommands(HelpGenerator help, CommandRegistry reg) {
+		if (reg.isEmpty()) return false;
 		
 		help.newLine()
 				.append("Commands:")
 				.newLine();
 		
-		List<ICommand> cmds = reg.all();
+		List<ICommand> cmds = reg.getNotIgnored();
 		
 		for (int i = 0; i < cmds.size(); i++) {
 			ICommand cmd = cmds.get(i);
@@ -149,5 +151,7 @@ public class HelpUtils {
 			if (i != cmds.size() - 1) help.newLine();
 			help.removeTab();
 		}
+		
+		return true;
 	}
 }

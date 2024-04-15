@@ -26,28 +26,30 @@ public abstract class CommanderRegistry<V> {
 		return reg.get(name);
 	}
 	
-	public List<V> all() {
-		List<V> list = new ArrayList<>();
-		for (Map.Entry<String, V> e : reg.entrySet()) {
-			if (list.contains(e.getValue())) continue;
-			
-			list.add(e.getValue());
-		}
-		return list;
+	public List<V> getAll() {
+		return getAll(true);
+	}
+	
+	public List<V> getNotIgnored() {
+		return getAll(false);
 	}
 	
 	public int size() {
-		List<V> list = new ArrayList<>();
-		for (Map.Entry<String, V> e : reg.entrySet()) {
-			if (list.contains(e.getValue())) continue;
-			if (ignored.contains(e.getValue())) continue;
-			
-			list.add(e.getValue());
-		}
-		return list.size();
+		return getNotIgnored().size();
 	}
 	
 	public boolean isEmpty() {
 		return size() == 0;
+	}
+	
+	private List<V> getAll(boolean withIgnored) {
+		List<V> list = new ArrayList<>();
+		for (Map.Entry<String, V> e : reg.entrySet()) {
+			if (list.contains(e.getValue())) continue;
+			if (!withIgnored && ignored.contains(e.getValue())) continue;
+			
+			list.add(e.getValue());
+		}
+		return list;
 	}
 }

@@ -18,7 +18,10 @@ public abstract class AbstractCommand implements ICommand {
 	public AbstractCommand(String name) {
 		this.name = name;
 		
-		if (shouldGenerateHelp()) argument(HelpGenerator.ARG_HELP);
+		if (shouldGenerateHelp()) {
+			argument(HelpGenerator.ARG_HELP);
+			arguments.ignore(HelpGenerator.ARG_HELP);
+		}
 		initArguments();
 	}
 	
