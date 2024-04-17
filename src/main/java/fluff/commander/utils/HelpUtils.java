@@ -13,15 +13,24 @@ import fluff.commander.command.ICommand;
 import fluff.commander.command.TaskCommand;
 import fluff.functions.gen.obj.Func1;
 
+/**
+ * Utility methods for generating command help.
+ */
 public class HelpUtils {
 	
-	public static String getUsage(AbstractCommand cmd) {
+	/**
+	 * Generates the usage string for the given command.
+	 *
+	 * @param cmd the command for which to generate the usage string
+	 * @return the usage string for the command
+	 */
+	public static String getUsage(AbstractCommand<?> cmd) {
 		StringBuilder sb = new StringBuilder();
 		
-		List<AbstractCommand> cmds = new ArrayList<>();
+		List<AbstractCommand<?>> cmds = new ArrayList<>();
 		
-		AbstractCommand cmd0 = cmd;
-		while (!(cmd0 instanceof FluffCommander)) {
+		AbstractCommand<?> cmd0 = cmd;
+		while (!(cmd0 instanceof FluffCommander<?>)) {
 			cmds.add(cmd0);
 			
 			cmd0 = cmd0.parent();
@@ -29,7 +38,7 @@ public class HelpUtils {
 		cmds.add(cmd0);
 		
 		for (int i = cmds.size() - 1; i >= 0; i--) {
-			AbstractCommand c = cmds.get(i);
+			AbstractCommand<?> c = cmds.get(i);
 			
 			sb.append(c.getName())
 					.append(" ");
@@ -46,12 +55,12 @@ public class HelpUtils {
 		}
 		
 		if (cmd.getArgumentRegistry().isEmpty()) {
-			if (cmd instanceof TaskCommand task && !task.getCommandRegistry().isEmpty()) {
+			if (cmd instanceof TaskCommand<?> task && !task.getCommandRegistry().isEmpty()) {
 				sb.append("[cmd]");
 			}
 		} else {
 			sb.append("[args");
-			if (cmd instanceof TaskCommand task && !task.getCommandRegistry().isEmpty()) {
+			if (cmd instanceof TaskCommand<?> task && !task.getCommandRegistry().isEmpty()) {
 				sb.append("|cmd");
 			}
 			sb.append("]");
@@ -60,8 +69,16 @@ public class HelpUtils {
 		return sb.toString();
 	}
 	
+	/**
+	 * Retrieves the number of spaces required for alignment in the output.
+	 *
+	 * @param list the list of items
+	 * @param func the function to retrieve the string representation of an item
+	 * @param <V>  the type of items in the list
+	 * @return the number of spaces required for alignment
+	 */
 	public static <V> int getSpaces(List<V> list, Func1<String, V> func) {
-		int spaces = 24;
+		int spaces = 16;
 		for (V v : list) {
 			int len = func.invoke(v).length();
 			
@@ -70,12 +87,26 @@ public class HelpUtils {
 		return spaces;
 	}
 	
+	/**
+	 * Appends spaces to the given help generator.
+	 *
+	 * @param help   the help generator
+	 * @param start  the starting string
+	 * @param spaces the number of spaces to append
+	 */
 	public static void appendSpaces(HelpGenerator help, String start, int spaces) {
 		for (int i = start.length(); i <= spaces; i++) {
 			help.append(" ");
 		}
 	}
 	
+	/**
+	 * Appends information about the arguments to the given help generator.
+	 *
+	 * @param help the help generator
+	 * @param reg  the argument registry
+	 * @return true if arguments are appended, false otherwise
+	 */
 	public static boolean appendArguments(HelpGenerator help, ArgumentRegistry reg) {
 		if (reg.isEmpty()) return false;
 		
@@ -84,7 +115,7 @@ public class HelpUtils {
 				.newLine();
 		
 		List<IArgument<?>> args = reg.getNotIgnored();
-		int spaces = getSpaces(args, v -> String.join(", ", v.getNames()));
+		//int spaces = getSpaces(args, v -> String.join(", ", v.getNames()));
 		
 		for (int i = 0; i < args.size(); i++) {
 			IArgument<?> arg = args.get(i);
@@ -92,7 +123,8 @@ public class HelpUtils {
 			
 			String names = String.join(", ", arg.getNames());
 			help.append(names);
-			appendSpaces(help, names, spaces);
+			//appendSpaces(help, names, spaces);
+			help.append(" ");
 			
 			IArgumentParser parser = reg.getParsers().get(arg.getParserClass());
 			help.append("<")
@@ -124,6 +156,13 @@ public class HelpUtils {
 		return true;
 	}
 	
+	/**
+	 * Appends information about the commands to the given help generator.
+	 *
+	 * @param help the help generator
+	 * @param reg  the command registry
+	 * @return true if commands are appended, false otherwise
+	 */
 	public static boolean appendCommands(HelpGenerator help, CommandRegistry reg) {
 		if (reg.isEmpty()) return false;
 		
