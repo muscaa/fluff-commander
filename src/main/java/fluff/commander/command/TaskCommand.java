@@ -26,15 +26,16 @@ public class TaskCommand<C extends FluffCommander<C>> extends AbstractCommand<C>
 	public void initArguments() {}
 	
 	@Override
-	public boolean onAction(C fc, CommandArguments args) throws CommandException {
-		return false;
+	public int onAction(C fc, CommandArguments args) throws CommandException {
+		return UNKNOWN;
 	}
 	
 	@Override
-	public boolean onAction(FluffCommander<?> fc, IArgumentInput in) throws CommandException {
-		if (super.onAction(fc, in)) return true;
+	public int onAction(FluffCommander<?> fc, IArgumentInput in) throws CommandException {
+		int argsExit = super.onAction(fc, in);
+		if (argsExit != UNKNOWN) return argsExit;
 		
-		if (in.isNull()) return false;
+		if (in.isNull()) return UNKNOWN;
 		
 		ICommand cmd = commands.get(in.consume());
 		if (cmd == null) throw new CommandException("Command not found!");

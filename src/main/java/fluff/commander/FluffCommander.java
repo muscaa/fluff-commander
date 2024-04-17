@@ -24,10 +24,10 @@ public class FluffCommander<C extends FluffCommander<C>> extends TaskCommand<C> 
 	 * Executes the FluffCommander with the given input arguments.
 	 *
 	 * @param in the input arguments
-	 * @return true if the command is executed successfully, false otherwise
+	 * @return the exit code of the command after execution
 	 * @throws CommandException if an error occurs during command execution
 	 */
-	public boolean execute(IArgumentInput in) throws CommandException {
+	public int execute(IArgumentInput in) throws CommandException {
 		return onAction(this, in);
 	}
 }

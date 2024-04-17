@@ -200,12 +200,23 @@ public class CommandArguments {
 			args.missing.add(arg);
 		}
 		if (args.missing() && !reg.isAllowMissing() && !ignoreMissing) {
-			throw new CommandException(
-					"Missing arguments: " + args.missing.stream()
-							.map(arg -> arg.getNames()[0])
-							.collect(Collectors.toList())
-					);
+			throwMissingArguments(args);
 		}
 		return args;
+	}
+	
+	/**
+	 * Throws a CommandException with the missing arguments.
+	 * 
+	 * @param args the command arguments
+	 * @throws CommandException the exception
+	 */
+	public static void throwMissingArguments(CommandArguments args) throws CommandException {
+		throw new CommandException(
+				"Missing arguments: " + args.getMissingArguments()
+						.stream()
+						.map(arg -> arg.getNames()[0])
+						.collect(Collectors.toList())
+				);
 	}
 }

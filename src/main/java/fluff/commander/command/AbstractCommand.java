@@ -45,19 +45,23 @@ public abstract class AbstractCommand<C extends FluffCommander<C>> implements IC
 	 *
 	 * @param fc the FluffCommander instance
 	 * @param args the command arguments
-	 * @return true if the action was executed successfully, false otherwise
+	 * @return the exit code of the command after execution
 	 * @throws CommandException if an error occurs during execution
 	 */
-	public abstract boolean onAction(C fc, CommandArguments args) throws CommandException;
+	public abstract int onAction(C fc, CommandArguments args) throws CommandException;
 	
 	@Override
-	public boolean onAction(FluffCommander<?> fc, IArgumentInput in) throws CommandException {
+	public int onAction(FluffCommander<?> fc, IArgumentInput in) throws CommandException {
 		CommandArguments args = CommandArguments.parse(in, arguments, shouldGenerateHelp());
 		
-		if (shouldGenerateHelp() && (args.missing() || args.Boolean(HelpGenerator.ARG_HELP))) {
-			HelpGenerator help = HelpGenerator.of(this);
-			help.getLines().forEach(System.out::println);
-			return true;
+		if (shouldGenerateHelp()) {
+			if (args.Boolean(HelpGenerator.ARG_HELP)) {
+				HelpGenerator help = HelpGenerator.of(this);
+				help.getLines().forEach(System.out::println);
+				return HELP;
+			}
+			
+			if (args.missing()) CommandArguments.throwMissingArguments(args);
 		}
 		
 		return onAction((C) fc, args);

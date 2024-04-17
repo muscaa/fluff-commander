@@ -8,15 +8,20 @@ import fluff.commander.arg.IArgumentInput;
  */
 public interface ICommand {
     
+	int UNKNOWN = -1;
+	int SUCCESS = 0;
+	int FAIL = 1;
+	int HELP = 2;
+	
     /**
      * Executes the action associated with this command.
      *
      * @param fc the FluffCommander instance managing the command
      * @param in the input containing command arguments
-     * @return true if the action was executed successfully, otherwise false
+     * @return the exit code of the command after execution
      * @throws CommandException if an error occurs during command execution
      */
-    boolean onAction(FluffCommander<?> fc, IArgumentInput in) throws CommandException;
+    int onAction(FluffCommander<?> fc, IArgumentInput in) throws CommandException;
     
     /**
      * Retrieves the name of this command.
