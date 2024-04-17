@@ -37,8 +37,7 @@ public class ArgumentParsers {
     /** The parser for string arguments. */
     public static final IArgumentParser<String> STRING = new ArgumentParserString();
     
-    /** The map storing registered parsers. */
-    private final Map<Class<?>, IArgumentParser<?>> parsers = new HashMap<>();
+    protected final Map<Class<?>, IArgumentParser<?>> parsers = new HashMap<>();
     
     /**
      * Constructs an instance of ArgumentParsers and registers the default parsers.

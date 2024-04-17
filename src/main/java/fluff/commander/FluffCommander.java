@@ -9,7 +9,7 @@ import fluff.commander.command.TaskCommand;
  *
  * @param <C> the type of FluffCommander associated with this command
  */
-public class FluffCommander<C extends FluffCommander> extends TaskCommand<C> {
+public class FluffCommander<C extends FluffCommander<C>> extends TaskCommand<C> {
 	
 	/**
 	 * Constructs a new FluffCommander with the specified name.

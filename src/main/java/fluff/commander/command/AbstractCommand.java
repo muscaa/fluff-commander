@@ -12,7 +12,7 @@ import fluff.functions.gen.obj.VoidFunc1;
  *
  * @param <C> the type of FluffCommander associated with this command
  */
-public abstract class AbstractCommand<C extends FluffCommander> implements ICommand {
+public abstract class AbstractCommand<C extends FluffCommander<C>> implements ICommand {
 	
 	private final ArgumentRegistry arguments = new ArgumentRegistry();
 	private final String name;
@@ -31,13 +31,14 @@ public abstract class AbstractCommand<C extends FluffCommander> implements IComm
 			argument(HelpGenerator.ARG_HELP);
 			arguments.ignore(HelpGenerator.ARG_HELP);
 		}
+		
 		initArguments();
 	}
 	
 	/**
 	 * Initializes the arguments for this command.
 	 */
-	public abstract void initArguments();
+	public void initArguments() {}
 	
 	/**
 	 * Executes the action associated with this command.
@@ -50,7 +51,7 @@ public abstract class AbstractCommand<C extends FluffCommander> implements IComm
 	public abstract boolean onAction(C fc, CommandArguments args) throws CommandException;
 	
 	@Override
-	public boolean onAction(FluffCommander fc, IArgumentInput in) throws CommandException {
+	public boolean onAction(FluffCommander<?> fc, IArgumentInput in) throws CommandException {
 		CommandArguments args = CommandArguments.parse(in, arguments, shouldGenerateHelp());
 		
 		if (shouldGenerateHelp() && (args.missing() || args.Boolean(HelpGenerator.ARG_HELP))) {

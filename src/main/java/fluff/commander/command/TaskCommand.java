@@ -9,7 +9,7 @@ import fluff.functions.gen.obj.VoidFunc1;
  *
  * @param <C> the type of FluffCommander associated with this command
  */
-public class TaskCommand<C extends FluffCommander> extends AbstractCommand<C> {
+public class TaskCommand<C extends FluffCommander<C>> extends AbstractCommand<C> {
 	
 	private final CommandRegistry commands = new CommandRegistry();
 	
@@ -31,7 +31,7 @@ public class TaskCommand<C extends FluffCommander> extends AbstractCommand<C> {
 	}
 	
 	@Override
-	public boolean onAction(FluffCommander fc, IArgumentInput in) throws CommandException {
+	public boolean onAction(FluffCommander<?> fc, IArgumentInput in) throws CommandException {
 		if (super.onAction(fc, in)) return true;
 		
 		if (in.isNull()) return false;

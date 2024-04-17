@@ -16,7 +16,7 @@ public interface ICommand {
      * @return true if the action was executed successfully, otherwise false
      * @throws CommandException if an error occurs during command execution
      */
-    boolean onAction(FluffCommander fc, IArgumentInput in) throws CommandException;
+    boolean onAction(FluffCommander<?> fc, IArgumentInput in) throws CommandException;
     
     /**
      * Retrieves the name of this command.
