@@ -87,9 +87,9 @@ fc.execute(new SimpleArgumentReader(new String[] { // will throw an error with m
 
 ## Usage
 
-To integrate it into your project, add the following dependency:
-
-**Gradle**
+<details>
+<summary>Gradle</summary>
+    
 ```gradle
 repositories {
     maven { url "https://jitpack.io" }
@@ -99,7 +99,11 @@ dependencies {
     implementation "com.github.muscaa:fluff-commander:VERSION"
 }
 ```
-**Maven**
+</details>
+
+<details>
+<summary>Maven</summary>
+    
 ```xml
 <repositories>
     <repository>
@@ -116,4 +120,6 @@ dependencies {
     </dependency>
 </dependencies>
 ```
+</details>
+
 Replace `VERSION` with the latest release available on [JitPack](https://jitpack.io/#muscaa/fluff-commander).
