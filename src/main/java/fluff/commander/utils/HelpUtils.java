@@ -3,7 +3,7 @@ package fluff.commander.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import fluff.commander.FluffCommander;
+import fluff.commander.Commander;
 import fluff.commander.arg.ArgumentRegistry;
 import fluff.commander.arg.IArgument;
 import fluff.commander.arg.IArgumentParser;
@@ -30,7 +30,7 @@ public class HelpUtils {
 		List<AbstractCommand<?>> cmds = new ArrayList<>();
 		
 		AbstractCommand<?> cmd0 = cmd;
-		while (!(cmd0 instanceof FluffCommander<?>)) {
+		while (!(cmd0 instanceof Commander<?>)) {
 			cmds.add(cmd0);
 			
 			cmd0 = cmd0.parent();
@@ -40,7 +40,7 @@ public class HelpUtils {
 		for (int i = cmds.size() - 1; i >= 0; i--) {
 			AbstractCommand<?> c = cmds.get(i);
 			
-			sb.append(c.getName())
+			sb.append(c.getNames()[0])
 					.append(" ");
 			
 			for (IArgument<?> arg : c.getArgumentRegistry().getAll()) {
@@ -176,7 +176,7 @@ public class HelpUtils {
 			ICommand cmd = cmds.get(i);
 			help.addTab();
 			
-			help.append(cmd.getName())
+			help.append(cmd.getNames()[0])
 					.newLine();
 			
 			help.addTab();

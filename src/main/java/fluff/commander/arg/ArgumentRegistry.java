@@ -10,12 +10,6 @@ public class ArgumentRegistry extends CommanderRegistry<IArgument<?>> {
     private ArgumentParsers parsers = new ArgumentParsers();
     private boolean allowMissing = false;
     
-    /**
-     * Retrieves the keys associated with an argument.
-     *
-     * @param value the argument for which keys are retrieved
-     * @return an array of keys associated with the argument
-     */
     @Override
     protected String[] getKeys(IArgument<?> value) {
         return value.getNames();

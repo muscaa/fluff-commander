@@ -3,7 +3,7 @@ package fluff.commander.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import fluff.commander.FluffCommander;
+import fluff.commander.Commander;
 import fluff.commander.arg.ArgumentBuilder;
 import fluff.commander.arg.IArgument;
 import fluff.commander.command.AbstractCommand;
@@ -98,11 +98,17 @@ public class HelpGenerator {
 	 */
 	public static HelpGenerator of(ICommand cmd, String usage) {
 		HelpGenerator help = new HelpGenerator();
-		help.append(cmd instanceof FluffCommander<?> ?
+		help.append(cmd instanceof Commander<?> ?
 						"Help:" :
-						("Command '" + cmd.getName() + "' help:"))
+						("Command '" + cmd.getNames()[0] + "' help:"))
 				.newLine();
 		help.addTab();
+		
+		if (cmd.getNames().length > 1) {
+			help.append("Alias: ")
+					.append(String.join(" | ", cmd.getNames()))
+					.newLine();
+		}
 		
 		help.append("Usage: ")
 				.append(usage)

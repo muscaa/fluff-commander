@@ -30,51 +30,26 @@ public class SimpleArgument<V> implements IArgument<V> {
         this.required = required;
     }
     
-    /**
-     * Gets the class of the argument parser.
-     *
-     * @return the class of the argument parser
-     */
     @Override
     public Class<V> getParserClass() {
         return parserClass;
     }
     
-    /**
-     * Gets the names of the argument.
-     *
-     * @return the names of the argument
-     */
     @Override
     public String[] getNames() {
         return names;
     }
     
-    /**
-     * Gets the description of the argument.
-     *
-     * @return the description of the argument
-     */
     @Override
     public String getDescription() {
         return description;
     }
     
-    /**
-     * Gets the default value of the argument.
-     *
-     * @return the default value of the argument
-     */
     @Override
     public V getDefaultValue() {
         return defaultValue;
     }
     
-    /**
-     * Checks if the argument is required.
-     *
-     * @return true if the argument is required, false otherwise
-     */
     @Override
     public boolean isRequired() {
         return required;

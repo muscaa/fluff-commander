@@ -9,14 +9,6 @@ import fluff.commander.arg.IArgumentInput;
  */
 public class ArgumentParserFloat implements IArgumentParser<Float> {
     
-    /**
-     * Parses the input argument as a single precision floating-point value.
-     *
-     * @param in the input argument to parse
-     * @return the parsed float value
-     * @throws ArgumentException if the input value is null or
-     *                           if it cannot be parsed as a float
-     */
     @Override
     public Float parse(IArgumentInput in) throws ArgumentException {
         if (in.isNull()) {
@@ -30,12 +22,6 @@ public class ArgumentParserFloat implements IArgumentParser<Float> {
         }
     }
     
-    /**
-     * Retrieves the possible values represented by this parser.
-     *
-     * @return an array containing a single string "float",
-     *         representing the type of value expected by this parser
-     */
     @Override
     public String[] getValues() {
         return new String[] {

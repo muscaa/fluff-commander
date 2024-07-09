@@ -9,14 +9,6 @@ import fluff.commander.arg.IArgumentInput;
  */
 public class ArgumentParserInt implements IArgumentParser<Integer> {
     
-    /**
-     * Parses the input argument as an integer value.
-     *
-     * @param in the input argument to parse
-     * @return the parsed integer value
-     * @throws ArgumentException if the input value is null or
-     *                           if it cannot be parsed as an integer
-     */
     @Override
     public Integer parse(IArgumentInput in) throws ArgumentException {
         if (in.isNull()) {
@@ -30,12 +22,6 @@ public class ArgumentParserInt implements IArgumentParser<Integer> {
         }
     }
     
-    /**
-     * Retrieves the possible values represented by this parser.
-     *
-     * @return an array containing a single string "int",
-     *         representing the type of value expected by this parser
-     */
     @Override
     public String[] getValues() {
         return new String[] {

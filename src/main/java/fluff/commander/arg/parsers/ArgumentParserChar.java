@@ -9,14 +9,6 @@ import fluff.commander.arg.IArgumentInput;
  */
 public class ArgumentParserChar implements IArgumentParser<Character> {
     
-    /**
-     * Parses the input argument as a character value.
-     *
-     * @param in the input argument to parse
-     * @return the parsed character value
-     * @throws ArgumentException if the input value is null or
-     *                           if it does not represent a single character
-     */
     @Override
     public Character parse(IArgumentInput in) throws ArgumentException {
         if (in.isNull()) {
@@ -29,12 +21,6 @@ public class ArgumentParserChar implements IArgumentParser<Character> {
         return in.consume().charAt(0);
     }
     
-    /**
-     * Retrieves the possible values represented by this parser.
-     *
-     * @return an array containing a single string "char",
-     *         representing the type of value expected by this parser
-     */
     @Override
     public String[] getValues() {
         return new String[] {

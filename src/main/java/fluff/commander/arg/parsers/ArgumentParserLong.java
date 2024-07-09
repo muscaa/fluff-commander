@@ -9,14 +9,6 @@ import fluff.commander.arg.IArgumentInput;
  */
 public class ArgumentParserLong implements IArgumentParser<Long> {
     
-    /**
-     * Parses the input argument as a long integer value.
-     *
-     * @param in the input argument to parse
-     * @return the parsed long integer value
-     * @throws ArgumentException if the input value is null or
-     *                           if it cannot be parsed as a long integer
-     */
     @Override
     public Long parse(IArgumentInput in) throws ArgumentException {
         if (in.isNull()) {
@@ -30,12 +22,6 @@ public class ArgumentParserLong implements IArgumentParser<Long> {
         }
     }
     
-    /**
-     * Retrieves the possible values represented by this parser.
-     *
-     * @return an array containing a single string "long",
-     *         representing the type of value expected by this parser
-     */
     @Override
     public String[] getValues() {
         return new String[] {

@@ -7,14 +7,21 @@ import fluff.commander.CommanderRegistry;
  */
 public class CommandRegistry extends CommanderRegistry<ICommand> {
     
-    /**
-     * Retrieves the keys associated with the given command.
-     *
-     * @param value the command for which keys are retrieved
-     * @return an array of keys associated with the command
-     */
+	private final ICommand parent;
+	
+	public CommandRegistry(ICommand parent) {
+		this.parent = parent;
+	}
+	
     @Override
     protected String[] getKeys(ICommand value) {
-        return new String[]{value.getName()};
+        return value.getNames();
     }
+    
+    @Override
+	public void register(ICommand value) {
+    	if (value instanceof AbstractCommand<?> ac) ac.parent = parent;
+    	
+		super.register(value);
+	}
 }

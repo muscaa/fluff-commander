@@ -9,14 +9,6 @@ import fluff.commander.arg.IArgumentInput;
  */
 public class ArgumentParserByte implements IArgumentParser<Byte> {
     
-    /**
-     * Parses the input argument as a byte value.
-     *
-     * @param in the input argument to parse
-     * @return the parsed byte value
-     * @throws ArgumentException if the input value is null or
-     *                           if a parsing error occurs
-     */
     @Override
     public Byte parse(IArgumentInput in) throws ArgumentException {
         if (in.isNull()) {
@@ -30,12 +22,6 @@ public class ArgumentParserByte implements IArgumentParser<Byte> {
         }
     }
     
-    /**
-     * Retrieves the possible values represented by this parser.
-     *
-     * @return an array containing a single string "byte",
-     *         representing the type of value expected by this parser
-     */
     @Override
     public String[] getValues() {
         return new String[] {

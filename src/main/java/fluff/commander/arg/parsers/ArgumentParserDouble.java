@@ -9,14 +9,6 @@ import fluff.commander.arg.IArgumentInput;
  */
 public class ArgumentParserDouble implements IArgumentParser<Double> {
     
-    /**
-     * Parses the input argument as a double precision floating-point value.
-     *
-     * @param in the input argument to parse
-     * @return the parsed double value
-     * @throws ArgumentException if the input value is null or
-     *                           if it cannot be parsed as a double
-     */
     @Override
     public Double parse(IArgumentInput in) throws ArgumentException {
         if (in.isNull()) {
@@ -30,12 +22,6 @@ public class ArgumentParserDouble implements IArgumentParser<Double> {
         }
     }
     
-    /**
-     * Retrieves the possible values represented by this parser.
-     *
-     * @return an array containing a single string "double",
-     *         representing the type of value expected by this parser
-     */
     @Override
     public String[] getValues() {
         return new String[] {

@@ -1,6 +1,6 @@
 package fluff.commander.command;
 
-import fluff.commander.FluffCommander;
+import fluff.commander.Commander;
 import fluff.commander.arg.IArgumentInput;
 
 /**
@@ -16,19 +16,19 @@ public interface ICommand {
     /**
      * Executes the action associated with this command.
      *
-     * @param fc the FluffCommander instance managing the command
+     * @param fc the Commander instance managing the command
      * @param in the input containing command arguments
      * @return the exit code of the command after execution
      * @throws CommandException if an error occurs during command execution
      */
-    int onAction(FluffCommander<?> fc, IArgumentInput in) throws CommandException;
+    int execute(Commander<?> c, IArgumentInput in) throws CommandException;
     
     /**
-     * Retrieves the name of this command.
+     * Retrieves the names of this command.
      *
-     * @return the name of the command
+     * @return the names of the command
      */
-    String getName();
+    String[] getNames();
     
     /**
      * Retrieves the description of this command.

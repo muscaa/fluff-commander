@@ -5,29 +5,29 @@ import fluff.commander.command.CommandException;
 import fluff.commander.command.TaskCommand;
 
 /**
- * Represents a FluffCommander, which is a type of task command.
+ * Represents a Commander, which is a type of task command.
  *
- * @param <C> the type of FluffCommander associated with this command
+ * @param <C> the type of Commander associated with this command
  */
-public class FluffCommander<C extends FluffCommander<C>> extends TaskCommand<C> {
+public class Commander<C extends Commander<C>> extends TaskCommand<C> {
 	
 	/**
-	 * Constructs a new FluffCommander with the specified name.
+	 * Constructs a new Commander with the specified name.
 	 *
-	 * @param name the name of the FluffCommander
+	 * @param name the name of the Commander
 	 */
-	public FluffCommander(String name) {
+	public Commander(String name) {
 		super(name);
 	}
 	
 	/**
-	 * Executes the FluffCommander with the given input arguments.
+	 * Executes the Commander with the given input arguments.
 	 *
 	 * @param in the input arguments
 	 * @return the exit code of the command after execution
 	 * @throws CommandException if an error occurs during command execution
 	 */
 	public int execute(IArgumentInput in) throws CommandException {
-		return onAction(this, in);
+		return execute(this, in);
 	}
 }

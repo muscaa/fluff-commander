@@ -1,38 +1,41 @@
 package fluff.commander.command;
 
-import fluff.commander.FluffCommander;
+import fluff.commander.Commander;
 import fluff.commander.arg.IArgumentInput;
 import fluff.functions.gen.obj.VoidFunc1;
 
 /**
  * Represents a task command.
  *
- * @param <C> the type of FluffCommander associated with this command
+ * @param <C> the type of Commander associated with this command
  */
-public class TaskCommand<C extends FluffCommander<C>> extends AbstractCommand<C> {
+public class TaskCommand<C extends Commander<C>> extends AbstractCommand<C> {
 	
-	private final CommandRegistry commands = new CommandRegistry();
+	private final CommandRegistry commands = new CommandRegistry(this);
 	
 	/**
-	 * Constructs a new task command with the specified name.
+	 * Constructs a new task with the specified name and alias.
 	 *
-	 * @param name the name of the command
+	 * @param name the name of the task
+	 * @param alias the alias of the task
 	 */
-	public TaskCommand(String name) {
-		super(name);
+	public TaskCommand(String name, String... alias) {
+		super(join(name, alias));
+		
+		init();
 	}
 	
 	@Override
-	public void initArguments() {}
+	public void init() {}
 	
 	@Override
-	public int onAction(C fc, CommandArguments args) throws CommandException {
+	public int onAction(C c, CommandArguments args) throws CommandException {
 		return UNKNOWN;
 	}
 	
 	@Override
-	public int onAction(FluffCommander<?> fc, IArgumentInput in) throws CommandException {
-		int argsExit = super.onAction(fc, in);
+	public int execute(Commander<?> c, IArgumentInput in) throws CommandException {
+		int argsExit = super.execute(c, in);
 		if (argsExit != UNKNOWN) return argsExit;
 		
 		if (in.isNull()) return UNKNOWN;
@@ -40,7 +43,7 @@ public class TaskCommand<C extends FluffCommander<C>> extends AbstractCommand<C>
 		ICommand cmd = commands.get(in.consume());
 		if (cmd == null) throw new CommandException("Command not found!");
 		
-		return cmd.onAction(fc, in);
+		return cmd.execute(c, in);
 	}
 	
 	/**
@@ -51,8 +54,6 @@ public class TaskCommand<C extends FluffCommander<C>> extends AbstractCommand<C>
 	 * @return the registered command
 	 */
 	public <V extends ICommand> V command(V command) {
-		if (command instanceof AbstractCommand<?> ac) ac.parent = this;
-		
 		commands.register(command);
 		return command;
 	}

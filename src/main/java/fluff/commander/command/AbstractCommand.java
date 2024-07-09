@@ -1,6 +1,6 @@
 package fluff.commander.command;
 
-import fluff.commander.FluffCommander;
+import fluff.commander.Commander;
 import fluff.commander.arg.ArgumentRegistry;
 import fluff.commander.arg.IArgument;
 import fluff.commander.arg.IArgumentInput;
@@ -10,48 +10,53 @@ import fluff.functions.gen.obj.VoidFunc1;
 /**
  * Represents an abstract command.
  *
- * @param <C> the type of FluffCommander associated with this command
+ * @param <C> the type of Commander associated with this command
  */
-public abstract class AbstractCommand<C extends FluffCommander<C>> implements ICommand {
+public abstract class AbstractCommand<C extends Commander<C>> implements ICommand {
 	
 	private final ArgumentRegistry arguments = new ArgumentRegistry();
-	private final String name;
+	private final String[] names;
 	
 	ICommand parent;
 	
-	/**
-	 * Constructs a new abstract command with the specified name.
-	 *
-	 * @param name the name of the command
-	 */
-	public AbstractCommand(String name) {
-		this.name = name;
+	AbstractCommand(String[] names) {
+		this.names = names;
 		
 		if (shouldGenerateHelp()) {
 			argument(HelpGenerator.ARG_HELP);
 			arguments.ignore(HelpGenerator.ARG_HELP);
 		}
+	}
+	
+	/**
+	 * Constructs a new abstract command with the specified name and alias.
+	 *
+	 * @param name the name of the command
+	 * @param alias the alias of the command
+	 */
+	public AbstractCommand(String name, String... alias) {
+		this(join(name, alias));
 		
-		initArguments();
+		init();
 	}
 	
 	/**
 	 * Initializes the arguments for this command.
 	 */
-	public void initArguments() {}
+	public void init() {}
 	
 	/**
 	 * Executes the action associated with this command.
 	 *
-	 * @param fc the FluffCommander instance
+	 * @param fc the Commander instance
 	 * @param args the command arguments
 	 * @return the exit code of the command after execution
 	 * @throws CommandException if an error occurs during execution
 	 */
-	public abstract int onAction(C fc, CommandArguments args) throws CommandException;
+	public abstract int onAction(C c, CommandArguments args) throws CommandException;
 	
 	@Override
-	public int onAction(FluffCommander<?> fc, IArgumentInput in) throws CommandException {
+	public int execute(Commander<?> c, IArgumentInput in) throws CommandException {
 		CommandArguments args = CommandArguments.parse(in, arguments, shouldGenerateHelp());
 		
 		if (shouldGenerateHelp()) {
@@ -64,12 +69,12 @@ public abstract class AbstractCommand<C extends FluffCommander<C>> implements IC
 			if (args.missing()) CommandArguments.throwMissingArguments(args);
 		}
 		
-		return onAction((C) fc, args);
+		return onAction((C) c, args);
 	}
 	
 	@Override
-	public String getName() {
-		return name;
+	public String[] getNames() {
+		return names;
 	}
 	
 	@Override
@@ -128,5 +133,15 @@ public abstract class AbstractCommand<C extends FluffCommander<C>> implements IC
 	 */
 	public ArgumentRegistry getArgumentRegistry() {
 		return arguments;
+	}
+	
+	static String[] join(String name, String[] alias) {
+		String[] result = new String[alias.length + 1];
+		int i = 0;
+		result[i++] = name;
+		for (String s : alias) {
+			result[i++] = s;
+		}
+		return result;
 	}
 }
