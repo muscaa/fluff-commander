@@ -48,7 +48,7 @@ public abstract class AbstractCommand<C extends Commander<C>> implements IComman
 	/**
 	 * Executes the action associated with this command.
 	 *
-	 * @param fc the Commander instance
+	 * @param c the Commander instance
 	 * @param args the command arguments
 	 * @return the exit code of the command after execution
 	 * @throws CommandException if an error occurs during execution

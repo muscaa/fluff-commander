@@ -16,7 +16,7 @@ public interface ICommand {
     /**
      * Executes the action associated with this command.
      *
-     * @param fc the Commander instance managing the command
+     * @param c the Commander instance managing the command
      * @param in the input containing command arguments
      * @return the exit code of the command after execution
      * @throws CommandException if an error occurs during command execution
