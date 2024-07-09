@@ -25,7 +25,12 @@ public class ArgumentParserLong implements IArgumentParser<Long> {
     @Override
     public String[] getValues() {
         return new String[] {
-            "long"
+        		"long"
         };
     }
+    
+	@Override
+	public boolean acceptsNull() {
+		return false;
+	}
 }

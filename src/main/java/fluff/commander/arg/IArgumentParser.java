@@ -24,5 +24,11 @@ public interface IArgumentParser<V> {
      *         or displaying available options
      */
     String[] getValues();
-
+    
+    /**
+     * Checks if this argument parser accepts null as a value.
+     *
+     * @return true if the argument parser accepts null, false otherwise
+     */
+    boolean acceptsNull();
 }

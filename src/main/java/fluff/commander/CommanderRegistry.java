@@ -1,9 +1,11 @@
 package fluff.commander;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A registry for managing mappings between keys and values.
@@ -13,7 +15,7 @@ import java.util.Map;
 public abstract class CommanderRegistry<V> {
     
     protected final Map<String, V> reg = new LinkedHashMap<>();
-    protected final List<V> ignored = new ArrayList<>();
+    protected final Set<V> ignored = new HashSet<>();
     
     /**
      * Retrieves the keys associated with a value.
@@ -96,7 +98,7 @@ public abstract class CommanderRegistry<V> {
      * @return a list of all values
      */
     private List<V> getAll(boolean withIgnored) {
-        List<V> list = new ArrayList<>();
+        List<V> list = new LinkedList<>();
         for (Map.Entry<String, V> e : reg.entrySet()) {
             if (list.contains(e.getValue())) continue;
             if (!withIgnored && ignored.contains(e.getValue())) continue;

@@ -22,6 +22,13 @@ public interface IArgument<V> {
     String[] getNames();
     
     /**
+     * Retrieves the values accepted by this argument.
+     *
+     * @return an array of values accepted by this argument
+     */
+    String[] getValues();
+    
+    /**
      * Retrieves the description of this argument.
      *
      * @return the description of the argument
@@ -41,4 +48,11 @@ public interface IArgument<V> {
      * @return true if the argument is required, false otherwise
      */
     boolean isRequired();
+    
+    /**
+     * Checks if this argument can be inline.
+     *
+     * @return true if the argument can be inline, false otherwise
+     */
+    boolean isInline();
 }

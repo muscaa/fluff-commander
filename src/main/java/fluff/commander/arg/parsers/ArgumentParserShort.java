@@ -25,7 +25,12 @@ public class ArgumentParserShort implements IArgumentParser<Short> {
     @Override
     public String[] getValues() {
         return new String[] {
-            "short"
+        		"short"
         };
     }
+    
+	@Override
+	public boolean acceptsNull() {
+		return false;
+	}
 }

@@ -25,8 +25,13 @@ public class ArgumentParserBoolean implements IArgumentParser<Boolean> {
     @Override
     public String[] getValues() {
         return new String[] {
-            "true",
-            "false"
+        		"true",
+        		"false"
         };
     }
+    
+	@Override
+	public boolean acceptsNull() {
+		return true;
+	}
 }

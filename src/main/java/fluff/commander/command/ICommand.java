@@ -36,4 +36,18 @@ public interface ICommand {
      * @return the description of the command
      */
     String getDescription();
+    
+    /**
+     * Retrieves the usage of this command.
+     *
+     * @return the usage of the command
+     */
+    String getUsage();
+    
+    /**
+     * Generates help output for this command.
+     *
+     * @param help the help builder
+     */
+    void generateHelp(HelpBuilder help);
 }

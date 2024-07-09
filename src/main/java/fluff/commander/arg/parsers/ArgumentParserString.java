@@ -21,7 +21,12 @@ public class ArgumentParserString implements IArgumentParser<String> {
     @Override
     public String[] getValues() {
         return new String[] {
-            "string"
+        		"string"
         };
     }
+    
+	@Override
+	public boolean acceptsNull() {
+		return false;
+	}
 }

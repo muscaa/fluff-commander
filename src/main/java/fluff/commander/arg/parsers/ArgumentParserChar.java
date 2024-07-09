@@ -24,7 +24,12 @@ public class ArgumentParserChar implements IArgumentParser<Character> {
     @Override
     public String[] getValues() {
         return new String[] {
-            "char"
+        		"char"
         };
     }
+    
+	@Override
+	public boolean acceptsNull() {
+		return false;
+	}
 }

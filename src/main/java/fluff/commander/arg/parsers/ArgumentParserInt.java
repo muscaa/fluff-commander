@@ -25,7 +25,12 @@ public class ArgumentParserInt implements IArgumentParser<Integer> {
     @Override
     public String[] getValues() {
         return new String[] {
-            "int"
+        		"int"
         };
     }
+    
+	@Override
+	public boolean acceptsNull() {
+		return false;
+	}
 }

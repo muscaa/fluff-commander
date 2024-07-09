@@ -1,5 +1,8 @@
 package fluff.commander.arg;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import fluff.commander.CommanderRegistry;
 
 /**
@@ -9,10 +12,27 @@ public class ArgumentRegistry extends CommanderRegistry<IArgument<?>> {
     
     private ArgumentParsers parsers = new ArgumentParsers();
     private boolean allowMissing = false;
+    private List<IArgument<?>> inlines = new LinkedList<>();
     
     @Override
     protected String[] getKeys(IArgument<?> value) {
         return value.getNames();
+    }
+    
+    @Override
+    public void register(IArgument<?> value) {
+    	if (value.isInline()) inlines.add(value);
+    	
+    	super.register(value);
+    }
+    
+    /**
+     * Retrieves the default argument.
+     *
+     * @return the default argument
+     */
+    public List<IArgument<?>> getInlines() {
+    	return inlines;
     }
     
     /**

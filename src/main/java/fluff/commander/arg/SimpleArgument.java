@@ -9,25 +9,31 @@ public class SimpleArgument<V> implements IArgument<V> {
     
     private final Class<V> parserClass;
     private final String[] names;
+    private final String[] values;
     private final String description;
     private final V defaultValue;
     private final boolean required;
+    private final boolean inline;
     
     /**
      * Constructs a SimpleArgument instance with the specified parameters.
      *
      * @param parserClass the class of the argument parser
      * @param names the names of the argument
+     * @param values the accepted values of the argument
      * @param description the description of the argument
      * @param defaultValue the default value of the argument
      * @param required true if the argument is required, false otherwise
+     * @param inline true if the argument is inline, false otherwise
      */
-    public SimpleArgument(Class<V> parserClass, String[] names, String description, V defaultValue, boolean required) {
+    public SimpleArgument(Class<V> parserClass, String[] names, String[] values, String description, V defaultValue, boolean required, boolean inline) {
         this.parserClass = parserClass;
         this.names = names;
+        this.values = values;
         this.description = description;
         this.defaultValue = defaultValue;
         this.required = required;
+        this.inline = inline;
     }
     
     @Override
@@ -38,6 +44,11 @@ public class SimpleArgument<V> implements IArgument<V> {
     @Override
     public String[] getNames() {
         return names;
+    }
+    
+    @Override
+    public String[] getValues() {
+    	return values;
     }
     
     @Override
@@ -53,5 +64,10 @@ public class SimpleArgument<V> implements IArgument<V> {
     @Override
     public boolean isRequired() {
         return required;
+    }
+    
+    @Override
+    public boolean isInline() {
+    	return inline;
     }
 }

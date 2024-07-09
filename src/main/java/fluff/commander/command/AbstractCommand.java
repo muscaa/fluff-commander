@@ -1,10 +1,15 @@
 package fluff.commander.command;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import fluff.commander.Commander;
+import fluff.commander.CommanderConfig;
 import fluff.commander.arg.ArgumentRegistry;
 import fluff.commander.arg.IArgument;
 import fluff.commander.arg.IArgumentInput;
-import fluff.commander.utils.HelpGenerator;
+import fluff.commander.arg.IArgumentParser;
 import fluff.functions.gen.obj.VoidFunc1;
 
 /**
@@ -14,8 +19,8 @@ import fluff.functions.gen.obj.VoidFunc1;
  */
 public abstract class AbstractCommand<C extends Commander<C>> implements ICommand {
 	
-	private final ArgumentRegistry arguments = new ArgumentRegistry();
-	private final String[] names;
+	protected final ArgumentRegistry arguments = new ArgumentRegistry();
+	protected final String[] names;
 	
 	ICommand parent;
 	
@@ -23,8 +28,8 @@ public abstract class AbstractCommand<C extends Commander<C>> implements IComman
 		this.names = names;
 		
 		if (shouldGenerateHelp()) {
-			argument(HelpGenerator.ARG_HELP);
-			arguments.ignore(HelpGenerator.ARG_HELP);
+			argument(HelpBuilder.ARG_HELP);
+			arguments.ignore(HelpBuilder.ARG_HELP);
 		}
 	}
 	
@@ -46,6 +51,23 @@ public abstract class AbstractCommand<C extends Commander<C>> implements IComman
 	public void init() {}
 	
 	/**
+	 * Executes the pre action associated with this command ignoring missing arguments.
+	 *
+	 * @param c the Commander instance
+	 * @param args the command arguments
+	 * @throws CommandException if an error occurs during execution
+	 */
+	public int onPreAction(C c, CommandArguments args) throws CommandException {
+		if (shouldGenerateHelp() && args.Boolean(HelpBuilder.ARG_HELP)) {
+			HelpBuilder help = new HelpBuilder();
+			generateHelp(help);
+			help.getLines().forEach(System.out::println);
+			return HELP;
+		}
+		return UNKNOWN;
+	}
+	
+	/**
 	 * Executes the action associated with this command.
 	 *
 	 * @param c the Commander instance
@@ -57,17 +79,12 @@ public abstract class AbstractCommand<C extends Commander<C>> implements IComman
 	
 	@Override
 	public int execute(Commander<?> c, IArgumentInput in) throws CommandException {
-		CommandArguments args = CommandArguments.parse(in, arguments, shouldGenerateHelp());
+		CommandArguments args = CommandArguments.parse(in, arguments, true);
 		
-		if (shouldGenerateHelp()) {
-			if (args.Boolean(HelpGenerator.ARG_HELP)) {
-				HelpGenerator help = HelpGenerator.of(this);
-				help.getLines().forEach(System.out::println);
-				return HELP;
-			}
-			
-			if (args.missing()) CommandArguments.throwMissingArguments(args);
-		}
+		int pre = onPreAction((C) c, args);
+		if (pre != UNKNOWN) return pre;
+		
+		if (args.missing()) CommandArguments.throwMissingArguments(args);
 		
 		return onAction((C) c, args);
 	}
@@ -89,6 +106,141 @@ public abstract class AbstractCommand<C extends Commander<C>> implements IComman
 	 */
 	protected boolean shouldGenerateHelp() {
 		return true;
+	}
+	
+	@Override
+	public String getUsage() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(names[0]);
+		
+		List<IArgument<?>> args = arguments.getNotIgnored();
+		
+		int less = 0;
+		StringBuilder more = new StringBuilder();
+		for (IArgument<?> arg : args) {
+			if (!arg.isRequired() && !arg.isInline()) {
+				less++;
+				continue;
+			}
+			
+			IArgumentParser<?> parser = arguments.getParsers().get(arg.getParserClass());
+			String[] values = arg.getValues() != null ? arg.getValues() : parser.getValues();
+			
+			String[] nameBrackets = arg.isInline() ?
+					CommanderConfig.OPTIONAL
+					: new String[] { "", "" };
+			String[] valuesBrackets = arg.isRequired() ?
+					parser.acceptsNull() ?
+							CommanderConfig.OPTIONAL
+							: CommanderConfig.REQUIRED
+					: CommanderConfig.REQUIRED;
+			
+			more.append(" ");
+			more.append(nameBrackets[0]);
+			more.append(arg.getNames()[0]);
+			more.append(nameBrackets[1]);
+			
+			more.append(" ");
+			more.append(valuesBrackets[0]);
+			more.append(String.join(CommanderConfig.SEPARATOR_OR, values));
+			more.append(valuesBrackets[1]);
+		}
+		
+		if (less > 0) {
+			sb.append(" ");
+			sb.append(CommanderConfig.OPTIONAL[0]);
+			sb.append("args");
+			sb.append(CommanderConfig.OPTIONAL[1]);
+		}
+		
+		sb.append(more.toString());
+		
+		return sb.toString();
+	}
+	
+	@Override
+	public void generateHelp(HelpBuilder help) {
+		help.append(names[0])
+				.append(":")
+				.newLine();
+		
+		help.tab();
+		{
+			String description = getDescription();
+			if (description != null) {
+				help.append("Description: ")
+						.append(description)
+						.newLine();
+			}
+			if (names.length > 1) {
+				help.append("Alias: ")
+						.append(String.join(CommanderConfig.SEPARATOR_OR, Arrays.copyOfRange(names, 1, names.length)))
+						.newLine();
+			}
+			
+			help.append("Usage: ")
+					.append(getUsage())
+					.newLine();
+			
+			if (!arguments.isEmpty()) {
+				help.append("Arguments:")
+						.newLine();
+				
+				help.tab();
+				{
+					for (IArgument<?> arg : arguments.getNotIgnored()) {
+						List<String> argProperties = new LinkedList<>();
+						if (arg.isRequired()) argProperties.add("required");
+						if (arg.isInline()) argProperties.add("inline");
+						
+						String[] argNames = arg.getNames();
+						String argDescription = arg.getDescription();
+						
+						help.append(argNames[0])
+								.append(":")
+								.newLine();
+						
+						help.tab();
+						{
+							if (!argProperties.isEmpty()) {
+								help.append("Properties: ")
+										.append(String.join(CommanderConfig.SEPARATOR_AND, argProperties))
+										.newLine();
+							}
+							if (argDescription != null) {
+								help.append("Description: ")
+										.append(argDescription)
+										.newLine();
+							}
+							if (argNames.length > 1) {
+								help.append("Alias: ")
+										.append(String.join(CommanderConfig.SEPARATOR_OR, Arrays.copyOfRange(argNames, 1, argNames.length)))
+										.newLine();
+							}
+							
+							IArgumentParser<?> parser = arguments.getParsers().get(arg.getParserClass());
+							String[] brackets = parser.acceptsNull() ? CommanderConfig.OPTIONAL : CommanderConfig.REQUIRED;
+							String[] values = arg.getValues() != null ? arg.getValues() : parser.getValues();
+							help.append("Usage: ")
+									.append(argNames[0])
+									.append(" ")
+									.append(brackets[0])
+									.append(String.join(CommanderConfig.SEPARATOR_OR, values))
+									.append(brackets[1])
+									.newLine();
+							if (!arg.isRequired() && arg.getDefaultValue() != null) {
+								help.append("Default: ")
+										.append(arg.getDefaultValue())
+										.newLine();
+							}
+						}
+						help.untab();
+					}
+				}
+				help.untab();
+			}
+		}
+		help.untab();
 	}
 	
 	/**

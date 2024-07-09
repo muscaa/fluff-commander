@@ -25,7 +25,12 @@ public class ArgumentParserDouble implements IArgumentParser<Double> {
     @Override
     public String[] getValues() {
         return new String[] {
-            "double"
+        		"double"
         };
     }
+    
+	@Override
+	public boolean acceptsNull() {
+		return false;
+	}
 }

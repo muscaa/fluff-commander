@@ -9,9 +9,11 @@ public class ArgumentBuilder<V> {
     
     private Class<V> parserClass;
     private String[] names;
+    private String[] values;
     private String description;
     private V defaultValue;
     private boolean required;
+    private boolean inline;
     
     /**
      * Sets the parser class for the argument.
@@ -33,6 +35,17 @@ public class ArgumentBuilder<V> {
     public ArgumentBuilder<V> names(String... names) {
         this.names = names;
         return this;
+    }
+    
+    /**
+     * Sets the values of the argument.
+     *
+     * @param values the values of the argument
+     * @return the argument builder instance
+     */
+    public ArgumentBuilder<V> values(String[] values) {
+    	this.values = values;
+    	return this;
     }
     
     /**
@@ -68,12 +81,22 @@ public class ArgumentBuilder<V> {
     }
     
     /**
+     * Marks the argument as inline.
+     *
+     * @return the argument builder instance
+     */
+    public ArgumentBuilder<V> inline() {
+    	this.inline = true;
+    	return this;
+    }
+    
+    /**
      * Builds the argument based on the provided configuration.
      *
      * @return the constructed argument
      */
     public IArgument<V> build() {
-        return new SimpleArgument<V>(parserClass, names, description, defaultValue, required);
+        return new SimpleArgument<>(parserClass, names, values, description, defaultValue, required, inline);
     }
     
     /**

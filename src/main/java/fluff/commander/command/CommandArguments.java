@@ -175,24 +175,29 @@ public class CommandArguments {
 			
 			args.set(arg, arg.getDefaultValue());
 		}
+		
 		String cmd = null;
 		while ((cmd = in.peek()) != null) {
 			IArgument<?> arg = reg.get(cmd);
 			if (arg == null) break;
 			
-			IArgumentParser<?> parser = reg.getParsers().get(arg.getParserClass());
-			if (parser == null) throw new CommandException("Argument parser doesn't exist for: " + cmd);
-			
 			in.consume();
 			
-			Object value;
-			try {
-				value = parser.parse(in);
-			} catch (ArgumentException e) {
-				throw new CommandException("Argument parse error!", e);
-			}
+			Object value = parseArgument(in, reg, arg);
 			args.set(arg, value);
 		}
+		
+		List<IArgument<?>> inlines = reg.getInlines();
+		if (!inlines.isEmpty()) {
+			for (IArgument<?> arg : inlines) {
+				if (args.get(arg) != null) continue;
+				if (in.isNull()) break;
+				
+				Object value = parseArgument(in, reg, arg);
+				args.set(arg, value);
+			}
+		}
+		
 		for (IArgument<?> arg : reg.getAll()) {
 			if (!arg.isRequired()) continue;
 			if (args.values.containsKey(arg)) continue;
@@ -203,6 +208,20 @@ public class CommandArguments {
 			throwMissingArguments(args);
 		}
 		return args;
+	}
+	
+	public static Object parseArgument(IArgumentInput in, ArgumentRegistry reg, IArgument<?> arg) throws CommandException {
+		IArgumentParser<?> parser = reg.getParsers().get(arg.getParserClass());
+		if (parser == null) throw new CommandException("Argument parser doesn't exist for: " + arg.getNames()[0]);
+		
+		Object value;
+		try {
+			value = parser.parse(in);
+		} catch (ArgumentException e) {
+			throw new CommandException("Argument parse error!", e);
+		}
+		
+		return value;
 	}
 	
 	/**

@@ -25,7 +25,12 @@ public class ArgumentParserByte implements IArgumentParser<Byte> {
     @Override
     public String[] getValues() {
         return new String[] {
-            "byte"
+        		"byte"
         };
     }
+    
+	@Override
+	public boolean acceptsNull() {
+		return false;
+	}
 }

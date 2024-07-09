@@ -14,10 +14,12 @@ public class Commander<C extends Commander<C>> extends TaskCommand<C> {
 	/**
 	 * Constructs a new Commander with the specified name.
 	 *
+	 * @param executable true if the Commander is executable, false otherwise
 	 * @param name the name of the Commander
+	 * @param alias the alias of the Commander
 	 */
-	public Commander(String name) {
-		super(name);
+	public Commander(boolean executable, String name, String... alias) {
+		super(executable, name, alias);
 	}
 	
 	/**

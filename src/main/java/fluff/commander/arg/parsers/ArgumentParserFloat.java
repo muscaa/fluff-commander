@@ -25,7 +25,12 @@ public class ArgumentParserFloat implements IArgumentParser<Float> {
     @Override
     public String[] getValues() {
         return new String[] {
-            "float"
+        		"float"
         };
     }
+    
+	@Override
+	public boolean acceptsNull() {
+		return false;
+	}
 }
