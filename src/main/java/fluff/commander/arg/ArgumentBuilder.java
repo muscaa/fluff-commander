@@ -96,7 +96,7 @@ public class ArgumentBuilder<V> {
      * @return the constructed argument
      */
     public IArgument<V> build() {
-        return new SimpleArgument<>(parserClass, names, values, description, defaultValue, required, inline);
+        return new DefaultArgument<>(parserClass, names, values, description, defaultValue, required, inline);
     }
     
     /**

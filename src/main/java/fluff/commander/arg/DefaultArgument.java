@@ -1,11 +1,11 @@
 package fluff.commander.arg;
 
 /**
- * Represents a simple argument configuration.
+ * Represents a default argument.
  *
  * @param <V> the type of the argument value
  */
-public class SimpleArgument<V> implements IArgument<V> {
+public class DefaultArgument<V> implements IArgument<V> {
     
     private final Class<V> parserClass;
     private final String[] names;
@@ -16,7 +16,7 @@ public class SimpleArgument<V> implements IArgument<V> {
     private final boolean inline;
     
     /**
-     * Constructs a SimpleArgument instance with the specified parameters.
+     * Constructs a DefaultArgument instance with the specified parameters.
      *
      * @param parserClass the class of the argument parser
      * @param names the names of the argument
@@ -26,7 +26,7 @@ public class SimpleArgument<V> implements IArgument<V> {
      * @param required true if the argument is required, false otherwise
      * @param inline true if the argument is inline, false otherwise
      */
-    public SimpleArgument(Class<V> parserClass, String[] names, String[] values, String description, V defaultValue, boolean required, boolean inline) {
+    public DefaultArgument(Class<V> parserClass, String[] names, String[] values, String description, V defaultValue, boolean required, boolean inline) {
         this.parserClass = parserClass;
         this.names = names;
         this.values = values;

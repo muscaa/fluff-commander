@@ -1,20 +1,20 @@
 package fluff.commander.arg;
 
 /**
- * Represents a simple argument input reader.
+ * Represents the default argument input.
  */
-public class SimpleArgumentReader implements IArgumentInput {
+public class DefaultArgumentInput implements IArgumentInput {
     
     private final String[] args;
     
     private int current;
     
     /**
-     * Constructs a SimpleArgumentReader instance with the specified array of arguments.
+     * Constructs a DefaultArgumentInput instance with the specified array of arguments.
      *
      * @param args the array of arguments
      */
-    public SimpleArgumentReader(String[] args) {
+    public DefaultArgumentInput(String[] args) {
         this.args = args;
         
         current = 0;
