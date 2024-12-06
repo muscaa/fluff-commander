@@ -14,7 +14,7 @@ public class StringArrayArgumentInput implements IArgumentInput {
      *
      * @param args the string array arguments
      */
-    public StringArrayArgumentInput(String[] args) {
+    public StringArrayArgumentInput(String... args) {
         this.args = args;
         
         current = 0;
