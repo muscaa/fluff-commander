@@ -18,7 +18,7 @@ public class NamedCommand extends AbstractCommand {
     }
     
     @Override
-    public int onAction(FluffCommander fc, CommandArguments args) throws CommandException {
+    public int onAction(Commander c, CommandArguments args) throws CommandException {
         System.out.println(getName());
         
         return SUCCESS;
@@ -43,7 +43,7 @@ public class PrintCommand extends AbstractCommand {
     }
     
     @Override
-    public int onAction(FluffCommander fc, CommandArguments args) throws CommandException {
+    public int onAction(Commander c, CommandArguments args) throws CommandException {
         String msg = args.get(ARG_MSG);
         System.out.println(msg);
         
@@ -55,34 +55,26 @@ public class PrintCommand extends AbstractCommand {
 ### Executing the commands
 
 ```java
-FluffCore.init(); // must be called before using Fluff libraries
+Commander<?> commander = new Commander<>(false, "example"); // create a new commander
 
-FluffCommander<?> fc = new FluffCommander<>("example"); // create a new commander
-
-fc.task("task", t -> { // register a new task "task"
+// register tasks and commands
+commander.task("task", t -> { // register a new task "task"
     t.command(new NamedCommand("one")); // a command available in task "task"
     t.command(new NamedCommand("two")); // another command
     
-    t.task(...); // more tasks/commands
+    t.task(...); // more sub tasks/commands
 });
-fc.command(new PrintCommand()); // a print command available directly
+commander.command(new PrintCommand()); // a print command available directly
 
-fc.execute(new SimpleArgumentReader(args)); // execute commands from program arguments
-fc.execute(new SimpleArgumentReader(new String[] { // will print "one"
-        "task", "one"
-}));
-fc.execute(new SimpleArgumentReader(new String[] { // will print "two"
-        "task", "two"
-}));
-fc.execute(new SimpleArgumentReader(new String[] { // will print "Hello World!"
-        "print", "--msg", "Hello World!"
-}));
-fc.execute(new SimpleArgumentReader(new String[] { // will print help about the command
-        "print", "--help"
-}));
-fc.execute(new SimpleArgumentReader(new String[] { // will throw an error with missing arguments
-        "print"
-}));
+// execute using parsed args
+commander.execute(new StringArrayArgumentInput(args)); // execute commands from program arguments
+commander.execute(new StringArrayArgumentInput("task", "one")); // will print "one"
+commander.execute(new StringArrayArgumentInput("task", "two")); // will print "two"
+
+// execute using a command string
+commander.execute(new StringArgumentInput("print --msg 'Hello World!'")); // will print "Hello World!"
+commander.execute(new StringArgumentInput("print --help")); // will print help about the command
+commander.execute(new StringArgumentInput("print")); // will throw an error with missing arguments
 ```
 
 ## Usage
