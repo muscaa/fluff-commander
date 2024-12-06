@@ -1,20 +1,20 @@
 package fluff.commander.arg;
 
 /**
- * Represents the default argument input.
+ * Represents a string array argument input.
  */
-public class DefaultArgumentInput implements IArgumentInput {
+public class StringArrayArgumentInput implements IArgumentInput {
     
     private final String[] args;
     
     private int current;
     
     /**
-     * Constructs a DefaultArgumentInput instance with the specified array of arguments.
+     * Constructs a StringArrayArgumentInput instance with the specified string array arguments.
      *
-     * @param args the array of arguments
+     * @param args the string array arguments
      */
-    public DefaultArgumentInput(String[] args) {
+    public StringArrayArgumentInput(String[] args) {
         this.args = args;
         
         current = 0;

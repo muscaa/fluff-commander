@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 /**
  * Represents a string argument input.
  */
-public class StringArgumentInput extends DefaultArgumentInput {
+public class StringArgumentInput extends StringArrayArgumentInput {
 	
 	private static final int NORMAL = 0;
 	private static final int IN_QUOTE = 1;
