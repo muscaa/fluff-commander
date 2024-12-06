@@ -159,6 +159,16 @@ public class TaskCommand<C extends Commander<C>> extends AbstractCommand<C> {
 	 * Creates and registers a new task under this task command and applies additional configuration using a functional interface.
 	 *
 	 * @param name the name of the task
+	 * @param func the function to apply to the task
+	 */
+	public void task(String name, VoidFunc1<TaskCommand<C>> func) {
+		func.invoke(task(name));
+	}
+	
+	/**
+	 * Creates and registers a new task under this task command and applies additional configuration using a functional interface.
+	 *
+	 * @param name the name of the task
 	 * @param alias the alias of the task
 	 * @param func the function to apply to the task
 	 */
