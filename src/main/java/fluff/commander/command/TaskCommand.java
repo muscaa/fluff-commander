@@ -12,8 +12,9 @@ import fluff.functions.gen.obj.VoidFunc1;
  * Represents a task command.
  *
  * @param <C> the type of Commander associated with this command
+ * @param <S> the type of ICommandSource associated with this command
  */
-public class TaskCommand<C extends Commander<C>> extends AbstractCommand<C> {
+public class TaskCommand<C extends Commander<C, S>, S extends ICommandSource> extends AbstractCommand<C, S> {
 	
 	protected final CommandRegistry commands = new CommandRegistry(this);
 	protected final boolean executable;
@@ -37,13 +38,13 @@ public class TaskCommand<C extends Commander<C>> extends AbstractCommand<C> {
 	public void init() {}
 	
 	@Override
-	public int onAction(C c, CommandArguments args) throws CommandException {
+	public int onAction(C c, S source, CommandArguments args) throws CommandException {
 		return UNKNOWN;
 	}
 	
 	@Override
-	public int execute(Commander<?> c, IArgumentInput in) throws CommandException {
-		int argsExit = super.execute(c, in);
+	public int execute(Commander<?, ?> c, ICommandSource source, IArgumentInput in) throws CommandException {
+		int argsExit = super.execute(c, source, in);
 		if (argsExit != UNKNOWN) return argsExit;
 		
 		if (in.isNull()) {
@@ -55,7 +56,7 @@ public class TaskCommand<C extends Commander<C>> extends AbstractCommand<C> {
 		ICommand cmd = commands.get(in.consume());
 		if (cmd == null) throw new CommandException("Command not found!");
 		
-		return cmd.execute(c, in);
+		return cmd.execute(c, source, in);
 	}
 	
 	@Override
@@ -151,7 +152,7 @@ public class TaskCommand<C extends Commander<C>> extends AbstractCommand<C> {
 	 * @param alias the alias of the task
 	 * @return the registered task command
 	 */
-	public TaskCommand<C> task(String name, String... alias) {
+	public TaskCommand<C, S> task(String name, String... alias) {
 		return command(new TaskCommand<>(false, name, alias));
 	}
 	
@@ -161,7 +162,7 @@ public class TaskCommand<C extends Commander<C>> extends AbstractCommand<C> {
 	 * @param name the name of the task
 	 * @param func the function to apply to the task
 	 */
-	public void task(String name, VoidFunc1<TaskCommand<C>> func) {
+	public void task(String name, VoidFunc1<TaskCommand<C, S>> func) {
 		func.invoke(task(name));
 	}
 	
@@ -172,7 +173,7 @@ public class TaskCommand<C extends Commander<C>> extends AbstractCommand<C> {
 	 * @param alias the alias of the task
 	 * @param func the function to apply to the task
 	 */
-	public void task(String name, String[] alias, VoidFunc1<TaskCommand<C>> func) {
+	public void task(String name, String[] alias, VoidFunc1<TaskCommand<C, S>> func) {
 		func.invoke(task(name, alias));
 	}
 	

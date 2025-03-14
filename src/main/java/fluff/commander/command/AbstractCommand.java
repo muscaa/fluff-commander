@@ -16,8 +16,9 @@ import fluff.functions.gen.obj.VoidFunc1;
  * Represents an abstract command.
  *
  * @param <C> the type of Commander associated with this command
+ * @param <S> the type of ICommandSource associated with this command
  */
-public abstract class AbstractCommand<C extends Commander<C>> implements ICommand {
+public abstract class AbstractCommand<C extends Commander<C, S>, S extends ICommandSource> implements ICommand {
 	
 	protected final ArgumentRegistry arguments = new ArgumentRegistry();
 	protected final String[] names;
@@ -54,10 +55,11 @@ public abstract class AbstractCommand<C extends Commander<C>> implements IComman
 	 * Executes the pre action associated with this command ignoring missing arguments.
 	 *
 	 * @param c the Commander instance
+	 * @param source the command source
 	 * @param args the command arguments
 	 * @throws CommandException if an error occurs during execution
 	 */
-	public int onPreAction(C c, CommandArguments args) throws CommandException {
+	public int onPreAction(C c, S source, CommandArguments args) throws CommandException {
 		if (shouldGenerateHelp() && args.Boolean(HelpBuilder.ARG_HELP)) {
 			HelpBuilder help = new HelpBuilder();
 			generateHelp(help);
@@ -71,22 +73,23 @@ public abstract class AbstractCommand<C extends Commander<C>> implements IComman
 	 * Executes the action associated with this command.
 	 *
 	 * @param c the Commander instance
+	 * @param source the command source
 	 * @param args the command arguments
 	 * @return the exit code of the command after execution
 	 * @throws CommandException if an error occurs during execution
 	 */
-	public abstract int onAction(C c, CommandArguments args) throws CommandException;
+	public abstract int onAction(C c, S source, CommandArguments args) throws CommandException;
 	
 	@Override
-	public int execute(Commander<?> c, IArgumentInput in) throws CommandException {
+	public int execute(Commander<?, ?> c, ICommandSource source, IArgumentInput in) throws CommandException {
 		CommandArguments args = CommandArguments.parse(in, arguments, true);
 		
-		int pre = onPreAction((C) c, args);
+		int pre = onPreAction((C) c, (S) source, args);
 		if (pre != UNKNOWN) return pre;
 		
 		if (args.missing()) CommandArguments.throwMissingArguments(args);
 		
-		return onAction((C) c, args);
+		return onAction((C) c, (S) source, args);
 	}
 	
 	@Override

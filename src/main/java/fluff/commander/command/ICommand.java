@@ -17,11 +17,12 @@ public interface ICommand {
      * Executes the action associated with this command.
      *
      * @param c the Commander instance managing the command
+     * @param source the source where the command was executed from
      * @param in the input containing command arguments
      * @return the exit code of the command after execution
      * @throws CommandException if an error occurs during command execution
      */
-    int execute(Commander<?> c, IArgumentInput in) throws CommandException;
+    int execute(Commander<?, ?> c, ICommandSource source, IArgumentInput in) throws CommandException;
     
     /**
      * Retrieves the names of this command.
