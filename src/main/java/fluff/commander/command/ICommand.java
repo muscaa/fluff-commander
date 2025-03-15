@@ -7,7 +7,7 @@ import fluff.commander.argument.IArgumentInput;
  * Interface representing a command to be executed by a commander.
  */
 public interface ICommand {
-    
+	
 	int UNKNOWN = -1;
 	int SUCCESS = 0;
 	int FAIL = 1;
@@ -46,9 +46,9 @@ public interface ICommand {
     String getUsage();
     
     /**
-     * Generates help output for this command.
+     * Generates the help output message for this command.
      *
-     * @param help the help builder
+     * @param help the help output message builder
      */
-    void generateHelp(HelpBuilder help);
+    void generateHelp(OutputBuilder ob);
 }

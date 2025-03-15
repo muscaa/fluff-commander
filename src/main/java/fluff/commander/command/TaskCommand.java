@@ -78,48 +78,48 @@ public class TaskCommand<C extends Commander<C, S>, S extends ICommandSource> ex
 	}
 	
 	@Override
-	public void generateHelp(HelpBuilder help) {
-		super.generateHelp(help);
+	public void generateHelp(OutputBuilder ob) {
+		super.generateHelp(ob);
 		
-		help.tab();
+		ob.tab();
 		{
 			if (!commands.isEmpty()) {
-				help.append("Commands:")
+				ob.append("Commands:")
 						.newLine();
 				
-				help.tab();
+				ob.tab();
 				{
 					for (ICommand cmd : commands.getNotIgnored()) {
 						String[] cmdNames = cmd.getNames();
 						String cmdDescription = cmd.getDescription();
 						
-						help.append(cmdNames[0])
+						ob.append(cmdNames[0])
 								.append(":")
 								.newLine();
 						
-						help.tab();
+						ob.tab();
 						{
 							if (cmdDescription != null) {
-								help.append("Description: ")
+								ob.append("Description: ")
 										.append(cmdDescription)
 										.newLine();
 							}
 							if (cmdNames.length > 1) {
-								help.append("Alias: ")
+								ob.append("Alias: ")
 										.append(String.join(CommanderConfig.SEPARATOR_OR, Arrays.copyOfRange(cmdNames, 1, cmdNames.length)))
 										.newLine();
 							}
-							help.append("Usage: ")
+							ob.append("Usage: ")
 									.append(cmd.getUsage())
 									.newLine();
 						}
-						help.untab();
+						ob.untab();
 					}
 				}
-				help.untab();
+				ob.untab();
 			}
 		}
-		help.untab();
+		ob.untab();
 	}
 	
 	/**

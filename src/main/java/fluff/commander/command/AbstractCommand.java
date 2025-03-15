@@ -6,6 +6,7 @@ import java.util.List;
 
 import fluff.commander.Commander;
 import fluff.commander.CommanderConfig;
+import fluff.commander.argument.ArgumentBuilder;
 import fluff.commander.argument.ArgumentRegistry;
 import fluff.commander.argument.IArgument;
 import fluff.commander.argument.IArgumentInput;
@@ -20,6 +21,11 @@ import fluff.functions.gen.obj.VoidFunc1;
  */
 public abstract class AbstractCommand<C extends Commander<C, S>, S extends ICommandSource> implements ICommand {
 	
+	public static IArgument<Boolean> ARG_HELP = ArgumentBuilder
+			.Boolean("--help")
+			.description("Shows help.")
+			.build();
+	
 	protected final ArgumentRegistry arguments = new ArgumentRegistry();
 	protected final String[] names;
 	
@@ -29,8 +35,8 @@ public abstract class AbstractCommand<C extends Commander<C, S>, S extends IComm
 		this.names = names;
 		
 		if (shouldGenerateHelp()) {
-			argument(HelpBuilder.ARG_HELP);
-			arguments.ignore(HelpBuilder.ARG_HELP);
+			argument(ARG_HELP);
+			arguments.ignore(ARG_HELP);
 		}
 	}
 	
@@ -60,11 +66,8 @@ public abstract class AbstractCommand<C extends Commander<C, S>, S extends IComm
 	 * @throws CommandException if an error occurs during execution
 	 */
 	public int onPreAction(C c, S source, CommandArguments args) throws CommandException {
-		if (shouldGenerateHelp() && args.Boolean(HelpBuilder.ARG_HELP)) {
-			HelpBuilder help = new HelpBuilder();
-			generateHelp(help);
-			help.getLines().forEach(System.out::println);
-			return HELP;
+		if (shouldGenerateHelp() && args.Boolean(ARG_HELP)) {
+			return help(c, source, args);
 		}
 		return UNKNOWN;
 	}
@@ -162,34 +165,34 @@ public abstract class AbstractCommand<C extends Commander<C, S>, S extends IComm
 	}
 	
 	@Override
-	public void generateHelp(HelpBuilder help) {
-		help.append(names[0])
+	public void generateHelp(OutputBuilder ob) {
+		ob.append(names[0])
 				.append(":")
 				.newLine();
 		
-		help.tab();
+		ob.tab();
 		{
 			String description = getDescription();
 			if (description != null) {
-				help.append("Description: ")
+				ob.append("Description: ")
 						.append(description)
 						.newLine();
 			}
 			if (names.length > 1) {
-				help.append("Alias: ")
+				ob.append("Alias: ")
 						.append(String.join(CommanderConfig.SEPARATOR_OR, Arrays.copyOfRange(names, 1, names.length)))
 						.newLine();
 			}
 			
-			help.append("Usage: ")
+			ob.append("Usage: ")
 					.append(getUsage())
 					.newLine();
 			
 			if (!arguments.isEmpty()) {
-				help.append("Arguments:")
+				ob.append("Arguments:")
 						.newLine();
 				
-				help.tab();
+				ob.tab();
 				{
 					for (IArgument<?> arg : arguments.getNotIgnored()) {
 						List<String> argProperties = new LinkedList<>();
@@ -199,24 +202,24 @@ public abstract class AbstractCommand<C extends Commander<C, S>, S extends IComm
 						String[] argNames = arg.getNames();
 						String argDescription = arg.getDescription();
 						
-						help.append(argNames[0])
+						ob.append(argNames[0])
 								.append(":")
 								.newLine();
 						
-						help.tab();
+						ob.tab();
 						{
 							if (!argProperties.isEmpty()) {
-								help.append("Properties: ")
+								ob.append("Properties: ")
 										.append(String.join(CommanderConfig.SEPARATOR_AND, argProperties))
 										.newLine();
 							}
 							if (argDescription != null) {
-								help.append("Description: ")
+								ob.append("Description: ")
 										.append(argDescription)
 										.newLine();
 							}
 							if (argNames.length > 1) {
-								help.append("Alias: ")
+								ob.append("Alias: ")
 										.append(String.join(CommanderConfig.SEPARATOR_OR, Arrays.copyOfRange(argNames, 1, argNames.length)))
 										.newLine();
 							}
@@ -224,7 +227,7 @@ public abstract class AbstractCommand<C extends Commander<C, S>, S extends IComm
 							IArgumentParser<?> parser = arguments.getParsers().get(arg.getParserClass());
 							String[] brackets = parser.acceptsNull() ? CommanderConfig.OPTIONAL : CommanderConfig.REQUIRED;
 							String[] values = arg.getValues() != null ? arg.getValues() : parser.getValues();
-							help.append("Usage: ")
+							ob.append("Usage: ")
 									.append(argNames[0])
 									.append(" ")
 									.append(brackets[0])
@@ -232,18 +235,25 @@ public abstract class AbstractCommand<C extends Commander<C, S>, S extends IComm
 									.append(brackets[1])
 									.newLine();
 							if (!arg.isRequired() && arg.getDefaultValue() != null) {
-								help.append("Default: ")
+								ob.append("Default: ")
 										.append(arg.getDefaultValue())
 										.newLine();
 							}
 						}
-						help.untab();
+						ob.untab();
 					}
 				}
-				help.untab();
+				ob.untab();
 			}
 		}
-		help.untab();
+		ob.untab();
+	}
+	
+	protected int help(C c, S source, CommandArguments args) {
+		OutputBuilder ob = new OutputBuilder();
+		generateHelp(ob);
+		System.out.println(ob.getOutput());
+		return HELP;
 	}
 	
 	/**
