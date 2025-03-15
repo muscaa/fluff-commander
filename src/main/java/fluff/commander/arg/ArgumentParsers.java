@@ -50,7 +50,7 @@ public class ArgumentParsers {
         register(char.class, CHAR);
         register(Character.class, CHAR);
         register(short.class, SHORT);
-        register(short.class, SHORT);
+        register(Short.class, SHORT);
         register(int.class, INT);
         register(Integer.class, INT);
         register(float.class, FLOAT);
