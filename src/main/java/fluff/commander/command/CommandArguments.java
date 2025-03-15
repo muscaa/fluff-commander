@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import fluff.commander.argument.ArgumentException;
 import fluff.commander.argument.ArgumentRegistry;
@@ -205,7 +204,7 @@ public class CommandArguments {
 			args.missing.add(arg);
 		}
 		if (args.missing() && !reg.isAllowMissing() && !ignoreMissing) {
-			throwMissingArguments(args);
+			throw new MissingArgumentsException(args);
 		}
 		return args;
 	}
@@ -222,20 +221,5 @@ public class CommandArguments {
 		}
 		
 		return value;
-	}
-	
-	/**
-	 * Throws a CommandException with the missing arguments.
-	 * 
-	 * @param args the command arguments
-	 * @throws CommandException the exception
-	 */
-	public static void throwMissingArguments(CommandArguments args) throws CommandException {
-		throw new CommandException(
-				"Missing arguments: " + args.getMissingArguments()
-						.stream()
-						.map(arg -> arg.getNames()[0])
-						.collect(Collectors.toList())
-				);
 	}
 }

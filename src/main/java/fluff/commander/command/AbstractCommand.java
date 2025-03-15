@@ -84,13 +84,13 @@ public abstract class AbstractCommand<C extends Commander<C, S>, S extends IComm
 	public abstract int onAction(C c, S source, CommandArguments args) throws CommandException;
 	
 	@Override
-	public int execute(Commander<?, ?> c, ICommandSource source, IArgumentInput in) throws CommandException {
+	public int execute(Commander<?, ?> c, ICommandSource source, IArgumentInput in) throws CommandException, MissingArgumentsException {
 		CommandArguments args = CommandArguments.parse(in, arguments, true);
 		
 		int pre = onPreAction((C) c, (S) source, args);
 		if (pre != UNKNOWN) return pre;
 		
-		if (args.missing()) CommandArguments.throwMissingArguments(args);
+		if (args.missing() && !arguments.isAllowMissing()) throw new MissingArgumentsException(args);
 		
 		return onAction((C) c, (S) source, args);
 	}
