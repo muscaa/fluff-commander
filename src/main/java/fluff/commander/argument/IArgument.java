@@ -1,4 +1,4 @@
-package fluff.commander.arg;
+package fluff.commander.argument;
 
 /**
  * Represents a command line argument.

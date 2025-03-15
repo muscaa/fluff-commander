@@ -1,6 +1,6 @@
 package fluff.commander;
 
-import fluff.commander.arg.IArgumentInput;
+import fluff.commander.argument.IArgumentInput;
 import fluff.commander.command.CommandException;
 import fluff.commander.command.ICommandSource;
 import fluff.commander.command.TaskCommand;

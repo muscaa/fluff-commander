@@ -1,8 +1,8 @@
-package fluff.commander.arg.parsers;
+package fluff.commander.argument.parsers;
 
-import fluff.commander.arg.ArgumentException;
-import fluff.commander.arg.IArgumentParser;
-import fluff.commander.arg.IArgumentInput;
+import fluff.commander.argument.ArgumentException;
+import fluff.commander.argument.IArgumentInput;
+import fluff.commander.argument.IArgumentParser;
 
 /**
  * A parser for character command line arguments.

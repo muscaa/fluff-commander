@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import fluff.commander.CommanderConfig;
-import fluff.commander.arg.ArgumentBuilder;
-import fluff.commander.arg.IArgument;
+import fluff.commander.argument.ArgumentBuilder;
+import fluff.commander.argument.IArgument;
 
 /**
  * Utility class for generating help messages.

@@ -1,22 +1,22 @@
-package fluff.commander.arg.parsers;
+package fluff.commander.argument.parsers;
 
-import fluff.commander.arg.ArgumentException;
-import fluff.commander.arg.IArgumentParser;
-import fluff.commander.arg.IArgumentInput;
+import fluff.commander.argument.ArgumentException;
+import fluff.commander.argument.IArgumentInput;
+import fluff.commander.argument.IArgumentParser;
 
 /**
- * A parser for long integer command line arguments.
+ * A parser for integer command line arguments.
  */
-public class ArgumentParserLong implements IArgumentParser<Long> {
+public class ArgumentParserInt implements IArgumentParser<Integer> {
     
     @Override
-    public Long parse(IArgumentInput in) throws ArgumentException {
+    public Integer parse(IArgumentInput in) throws ArgumentException {
         if (in.isNull()) {
             throw new ArgumentException("Specified value is null!");
         }
         
         try {
-            return Long.parseLong(in.consume());
+            return Integer.parseInt(in.consume());
         } catch (NumberFormatException e) {
             throw new ArgumentException("Parse error!", e);
         }
@@ -25,7 +25,7 @@ public class ArgumentParserLong implements IArgumentParser<Long> {
     @Override
     public String[] getValues() {
         return new String[] {
-        		"long"
+        		"int"
         };
     }
     

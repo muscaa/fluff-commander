@@ -1,9 +1,9 @@
-package fluff.commander.arg;
+package fluff.commander.argument;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import fluff.commander.arg.parsers.*;
+import fluff.commander.argument.parsers.*;
 
 /**
  * Utility class for managing argument parsers.

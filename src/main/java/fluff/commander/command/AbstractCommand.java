@@ -6,10 +6,10 @@ import java.util.List;
 
 import fluff.commander.Commander;
 import fluff.commander.CommanderConfig;
-import fluff.commander.arg.ArgumentRegistry;
-import fluff.commander.arg.IArgument;
-import fluff.commander.arg.IArgumentInput;
-import fluff.commander.arg.IArgumentParser;
+import fluff.commander.argument.ArgumentRegistry;
+import fluff.commander.argument.IArgument;
+import fluff.commander.argument.IArgumentInput;
+import fluff.commander.argument.IArgumentParser;
 import fluff.functions.gen.obj.VoidFunc1;
 
 /**

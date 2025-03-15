@@ -1,7 +1,7 @@
 package fluff.commander.command;
 
 import fluff.commander.Commander;
-import fluff.commander.arg.IArgumentInput;
+import fluff.commander.argument.IArgumentInput;
 
 /**
  * Interface representing a command to be executed by a commander.

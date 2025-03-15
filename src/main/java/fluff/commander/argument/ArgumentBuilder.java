@@ -1,4 +1,4 @@
-package fluff.commander.arg;
+package fluff.commander.argument;
 
 /**
  * A builder class for creating command line arguments.

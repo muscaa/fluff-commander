@@ -5,7 +5,7 @@ import java.util.List;
 
 import fluff.commander.Commander;
 import fluff.commander.CommanderConfig;
-import fluff.commander.arg.IArgumentInput;
+import fluff.commander.argument.IArgumentInput;
 import fluff.functions.gen.obj.VoidFunc1;
 
 /**

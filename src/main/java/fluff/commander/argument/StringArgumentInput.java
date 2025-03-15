@@ -1,4 +1,4 @@
-package fluff.commander.arg;
+package fluff.commander.argument;
 
 import java.util.LinkedList;
 import java.util.List;

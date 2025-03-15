@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import fluff.commander.arg.ArgumentException;
-import fluff.commander.arg.ArgumentRegistry;
-import fluff.commander.arg.IArgument;
-import fluff.commander.arg.IArgumentInput;
-import fluff.commander.arg.IArgumentParser;
+import fluff.commander.argument.ArgumentException;
+import fluff.commander.argument.ArgumentRegistry;
+import fluff.commander.argument.IArgument;
+import fluff.commander.argument.IArgumentInput;
+import fluff.commander.argument.IArgumentParser;
 
 /**
  * Represents the arguments associated with a command.
