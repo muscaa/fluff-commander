@@ -2,7 +2,9 @@ package fluff.commander;
 
 import fluff.commander.argument.IArgumentInput;
 import fluff.commander.command.CommandException;
+import fluff.commander.command.CommandNotFoundException;
 import fluff.commander.command.ICommandSource;
+import fluff.commander.command.MissingArgumentsException;
 import fluff.commander.command.TaskCommand;
 
 /**
@@ -31,8 +33,10 @@ public class Commander<C extends Commander<C, S>, S extends ICommandSource> exte
 	 * @param in the input arguments
 	 * @return the exit code of the command after execution
 	 * @throws CommandException if an error occurs during command execution
+	 * @throws CommandNotFoundException if the command is not found
+	 * @throws MissingArgumentsException if the required arguments are not provided
 	 */
-	public int execute(S source, IArgumentInput in) throws CommandException {
+	public int execute(S source, IArgumentInput in) throws CommandException, CommandNotFoundException, MissingArgumentsException {
 		return execute(this, source, in);
 	}
 }

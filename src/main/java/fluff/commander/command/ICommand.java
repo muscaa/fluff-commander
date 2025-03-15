@@ -21,8 +21,10 @@ public interface ICommand {
      * @param in the input containing command arguments
      * @return the exit code of the command after execution
      * @throws CommandException if an error occurs during command execution
+	 * @throws CommandNotFoundException if the command is not found
+	 * @throws MissingArgumentsException if the required arguments are not provided
      */
-    int execute(Commander<?, ?> c, ICommandSource source, IArgumentInput in) throws CommandException;
+    int execute(Commander<?, ?> c, ICommandSource source, IArgumentInput in) throws CommandException, CommandNotFoundException, MissingArgumentsException;
     
     /**
      * Retrieves the names of this command.

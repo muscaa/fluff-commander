@@ -166,8 +166,9 @@ public class CommandArguments {
      * @param ignoreMissing whether to ignore missing arguments
      * @return the parsed command arguments
      * @throws CommandException if an error occurs during parsing
+     * @throws MissingArgumentsException if the required arguments are not provided
      */
-	public static CommandArguments parse(IArgumentInput in, ArgumentRegistry reg, boolean ignoreMissing) throws CommandException {
+	public static CommandArguments parse(IArgumentInput in, ArgumentRegistry reg, boolean ignoreMissing) throws CommandException, MissingArgumentsException {
 		CommandArguments args = new CommandArguments();
 		for (IArgument<?> arg : reg.getAll()) {
 			if (arg.isRequired()) continue;

@@ -10,18 +10,18 @@ public class ArgumentException extends CommanderException {
     private static final long serialVersionUID = -2303062509504751226L;
     
     /**
-     * Constructs a new argument exception with the specified detail message.
+     * Constructs a new argument exception with the specified message.
      *
-     * @param message the detail message
+     * @param message the message
      */
     public ArgumentException(String message) {
         super(message);
     }
     
     /**
-     * Constructs a new argument exception with the specified detail message and cause.
+     * Constructs a new argument exception with the specified message and cause.
      *
-     * @param message the detail message
+     * @param message the message
      * @param cause the cause
      */
     public ArgumentException(String message, Throwable cause) {

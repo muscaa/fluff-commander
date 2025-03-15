@@ -43,7 +43,7 @@ public class TaskCommand<C extends Commander<C, S>, S extends ICommandSource> ex
 	}
 	
 	@Override
-	public int execute(Commander<?, ?> c, ICommandSource source, IArgumentInput in) throws CommandException {
+	public int execute(Commander<?, ?> c, ICommandSource source, IArgumentInput in) throws CommandException, CommandNotFoundException, MissingArgumentsException {
 		int argsExit = super.execute(c, source, in);
 		if (argsExit != UNKNOWN) return argsExit;
 		
@@ -54,7 +54,7 @@ public class TaskCommand<C extends Commander<C, S>, S extends ICommandSource> ex
 		}
 		
 		ICommand cmd = commands.get(in.consume());
-		if (cmd == null) throw new CommandException("Command not found!");
+		if (cmd == null) throw new CommandNotFoundException();
 		
 		return cmd.execute(c, source, in);
 	}

@@ -84,7 +84,7 @@ public abstract class AbstractCommand<C extends Commander<C, S>, S extends IComm
 	public abstract int onAction(C c, S source, CommandArguments args) throws CommandException;
 	
 	@Override
-	public int execute(Commander<?, ?> c, ICommandSource source, IArgumentInput in) throws CommandException, MissingArgumentsException {
+	public int execute(Commander<?, ?> c, ICommandSource source, IArgumentInput in) throws CommandException, CommandNotFoundException, MissingArgumentsException {
 		CommandArguments args = CommandArguments.parse(in, arguments, true);
 		
 		int pre = onPreAction((C) c, (S) source, args);
