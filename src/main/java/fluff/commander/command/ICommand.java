@@ -50,7 +50,7 @@ public interface ICommand {
     /**
      * Generates the help output message for this command.
      *
-     * @param help the help output message builder
+     * @param ob the output builder to write the help message to
      */
     void generateHelp(OutputBuilder ob);
 }
