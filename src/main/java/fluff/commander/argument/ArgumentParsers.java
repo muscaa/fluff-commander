@@ -1,9 +1,19 @@
 package fluff.commander.argument;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
-import fluff.commander.argument.parsers.*;
+import fluff.commander.argument.parsers.ArgumentParserBoolean;
+import fluff.commander.argument.parsers.ArgumentParserByte;
+import fluff.commander.argument.parsers.ArgumentParserChar;
+import fluff.commander.argument.parsers.ArgumentParserDouble;
+import fluff.commander.argument.parsers.ArgumentParserFloat;
+import fluff.commander.argument.parsers.ArgumentParserInt;
+import fluff.commander.argument.parsers.ArgumentParserLong;
+import fluff.commander.argument.parsers.ArgumentParserShort;
+import fluff.commander.argument.parsers.ArgumentParserString;
 
 /**
  * Utility class for managing argument parsers.
@@ -38,6 +48,7 @@ public class ArgumentParsers {
     public static final IArgumentParser<String> STRING = new ArgumentParserString();
     
     protected final Map<Class<?>, IArgumentParser<?>> parsers = new HashMap<>();
+    protected final List<ArgumentParsers> parents = new LinkedList<>();
     
     /**
      * Constructs an instance of ArgumentParsers and registers the default parsers.
@@ -73,6 +84,15 @@ public class ArgumentParsers {
     }
     
     /**
+     * Unregisters a parser for a specific class.
+     * 
+     * @param clazz the class type
+     */
+	public void unregister(Class<?> clazz) {
+		parsers.remove(clazz);
+	}
+    
+    /**
      * Copies parsers from another ArgumentParsers instance.
      *
      * @param from the source ArgumentParsers instance
@@ -84,12 +104,36 @@ public class ArgumentParsers {
     }
     
     /**
+     * Extends the current ArgumentParsers with parsers from another ArgumentParsers instance.
+     * 
+     * @param parent the parent ArgumentParsers instance
+     */
+	public void extend(ArgumentParsers parent) {
+		parents.add(parent);
+	}
+    
+    /**
      * Retrieves the parser for the specified class.
      *
      * @param clazz the class type
      * @return the parser for the class
      */
     public IArgumentParser<?> get(Class<?> clazz) {
-        return parsers.get(clazz);
+    	IArgumentParser<?> parser = parsers.get(clazz);
+		if (parser != null) return parser;
+		
+		for (ArgumentParsers parent : parents) {
+			parser = parent.get(clazz);
+            if (parser != null) return parser;
+		}
+		
+		return null;
+    }
+    
+	/**
+	 * Clears all parsers.
+	 */
+    public void clear() {
+    	parsers.clear();
     }
 }
