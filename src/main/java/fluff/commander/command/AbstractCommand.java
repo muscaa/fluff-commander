@@ -67,7 +67,7 @@ public abstract class AbstractCommand<C extends Commander<C, S>, S extends IComm
 	 */
 	public int onPreAction(C c, S source, CommandArguments args) throws CommandException {
 		if (shouldGenerateHelp() && args.Boolean(ARG_HELP)) {
-			return help(c, source, args);
+			return c.help(this);
 		}
 		return UNKNOWN;
 	}
@@ -247,13 +247,6 @@ public abstract class AbstractCommand<C extends Commander<C, S>, S extends IComm
 			}
 		}
 		ob.untab();
-	}
-	
-	protected int help(C c, S source, CommandArguments args) {
-		OutputBuilder ob = new OutputBuilder();
-		generateHelp(ob);
-		System.out.println(ob.getOutput());
-		return HELP;
 	}
 	
 	/**

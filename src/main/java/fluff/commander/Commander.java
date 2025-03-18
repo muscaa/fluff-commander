@@ -3,8 +3,10 @@ package fluff.commander;
 import fluff.commander.argument.IArgumentInput;
 import fluff.commander.command.CommandException;
 import fluff.commander.command.CommandNotFoundException;
+import fluff.commander.command.ICommand;
 import fluff.commander.command.ICommandSource;
 import fluff.commander.command.MissingArgumentsException;
+import fluff.commander.command.OutputBuilder;
 import fluff.commander.command.TaskCommand;
 
 /**
@@ -38,5 +40,18 @@ public class Commander<C extends Commander<C, S>, S extends ICommandSource> exte
 	 */
 	public int execute(S source, IArgumentInput in) throws CommandException, CommandNotFoundException, MissingArgumentsException {
 		return execute(this, source, in);
+	}
+	
+	/**
+	 * Prints the help message for the specified command.
+	 * 
+	 * @param command the command to print help for
+	 * @return the exit code of the command after execution
+	 */
+	public int help(ICommand command) {
+		OutputBuilder ob = new OutputBuilder();
+		command.generateHelp(ob);
+		System.out.println(ob.getOutput());
+		return HELP;
 	}
 }
