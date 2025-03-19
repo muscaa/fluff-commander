@@ -46,9 +46,10 @@ public class Commander<C extends Commander<C, S>, S extends ICommandSource> exte
 	 * Prints the help message for the specified command.
 	 * 
 	 * @param command the command to print help for
+	 * @param source the source where the command was executed from
 	 * @return the exit code of the command after execution
 	 */
-	public int help(ICommand command) {
+	public int help(ICommand command, S source) {
 		OutputBuilder ob = new OutputBuilder();
 		command.generateHelp(ob);
 		System.out.println(ob.getOutput());

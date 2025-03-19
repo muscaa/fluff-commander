@@ -67,7 +67,7 @@ public abstract class AbstractCommand<C extends Commander<C, S>, S extends IComm
 	 */
 	public int onPreAction(C c, S source, CommandArguments args) throws CommandException {
 		if (shouldGenerateHelp() && args.Boolean(ARG_HELP)) {
-			return c.help(this);
+			return c.help(this, source);
 		}
 		return UNKNOWN;
 	}
